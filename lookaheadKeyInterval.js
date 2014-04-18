@@ -6,7 +6,7 @@
 
   $.fn.extend({
     typetype: function(text, callback, keypress) {
-      var charDelay, deferreds, interval, t;
+      var charDelay, deferreds, elem, interval;
       charDelay = 100;
       interval = function(index) {
         var lastchar, nextchar;
@@ -35,28 +35,34 @@
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
-          t = this[_i];
-          _results.push((function(t) {
+          elem = this[_i];
+          _results.push((function(elem) {
+            var setText;
+            setText = elem.tagName.toLowerCase() === 'input' ? function(str) {
+              return elem.value = str;
+            } : function(str) {
+              return elem.innerHTML = str;
+            };
             return $.Deferred(function(deferred) {
               var updateChar;
-              updateChar = function(limit) {
-                $(t).html(text.substr(0, limit));
+              updateChar = function(index) {
+                setText(text.substr(0, index));
                 if (keypress != null) {
-                  keypress.call(t, limit);
+                  keypress.call(elem, index);
                 }
-                if (limit < text.length) {
+                if (index < text.length) {
                   return setTimeout(function() {
-                    return updateChar(limit + 1);
-                  }, interval(limit));
+                    return updateChar(index + 1);
+                  }, interval(index));
                 } else {
                   return deferred.resolve();
                 }
               };
               return updateChar(1);
             }).done(function() {
-              return callback != null ? callback.call(t) : void 0;
+              return callback != null ? callback.call(elem) : void 0;
             });
-          })(t));
+          })(elem));
         }
         return _results;
       }).call(this);

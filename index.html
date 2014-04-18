@@ -11,6 +11,7 @@ textarea {
 
 <textarea class="a"></textarea>
 <textarea class="a"></textarea>
+<input type="text" id="myInput" />
 
 <br />
 <textarea class="b"></textarea>
@@ -19,6 +20,7 @@ textarea {
 <script type="text/javascript" src="lookaheadKeyInterval.js"></script>
 <script type="text/javascript">
 $(function(){
+  $('#myInput').typetype('This is some typing!')
   $('textarea.a').focus().typetype('Hello, world! \n\n\n\naaaaaaaaa\n\n\
   ipsum aliquam luctus sagittis.\
   ', function(){

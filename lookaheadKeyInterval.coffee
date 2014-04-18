@@ -7,6 +7,8 @@ $.fn.extend
   # keypress: function(index) called after every keypress
   typetype: (text, callback, keypress) ->
 
+    # TODO: simulate events... keydown, keyup, keypress, textInput etc.
+
     charDelay = 100
 
     # function returns the delay before the next character
@@ -26,27 +28,33 @@ $.fn.extend
         else 2
 
 
-    deferreds = for t in @
-      do (t) ->
-        $.Deferred( (deferred) ->
+    deferreds = for elem in @
+      do (elem) ->
+        # ensure we 'type' into the right thing
+        setText = if elem.tagName.toLowerCase() is 'input'
+          (str) -> elem.value = str
+        else
+          (str) -> elem.innerHTML = str
 
-          # do all the typing for the single textarea, `t`
-          updateChar = (limit) ->
+
+        $.Deferred( (deferred) ->
+          # do all the typing for the single textarea, `elem`
+          updateChar = (index) ->
             # append one char
-            $(t).html(text.substr(0,limit))
-            keypress?.call(t, limit)
+            setText(text.substr(0,index))
+            keypress?.call(elem, index)
 
             # timeout recurse
-            if limit < text.length
+            if index < text.length
               setTimeout () ->
-                updateChar(limit+1)
-              , interval(limit)  # interval depends on position in string
+                updateChar(index+1)
+              , interval(index)  # interval depends on position in string
             else
               deferred.resolve()
 
           # start it all off immediately!
           updateChar(1)
-        ).done(() -> callback?.call(t))
+        ).done(() -> callback?.call(elem))
 
     # combined promise of all of them
     return $.when(deferreds...) # ie $.when(d1, d2)   NOT   $.when([d1,d2])
