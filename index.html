@@ -10,7 +10,9 @@
 <script type="text/javascript" src="simple.js"></script>
 <script type="text/javascript">
 $(function(){
-  $('textarea').typetype('Hello, world!')
+  $('textarea').typetype('Hello, world!').done(function(){
+    alert('typetypes done')
+  })
 })
 </script>
 

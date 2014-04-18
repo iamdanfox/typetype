@@ -5,5 +5,12 @@ $ = jQuery
 $.fn.extend
   # Change pluginName to your plugin's name.
   typetype: (text) ->
-    return @each (i, item) ->
-      $(@).html(text)
+    # temporary hack, just work on the first
+    textarea = @.first()
+
+    return $.Deferred( (deferred) =>
+      setTimeout(() =>
+        textarea.html(text)
+        deferred.resolve()
+      , 1000)
+    )

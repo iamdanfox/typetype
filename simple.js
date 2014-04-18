@@ -6,9 +6,16 @@
 
   $.fn.extend({
     typetype: function(text) {
-      return this.each(function(i, item) {
-        return $(this).html(text);
-      });
+      var textarea;
+      textarea = this.first();
+      return $.Deferred((function(_this) {
+        return function(deferred) {
+          return setTimeout(function() {
+            textarea.html(text);
+            return deferred.resolve();
+          }, 1000);
+        };
+      })(this));
     }
   });
 
