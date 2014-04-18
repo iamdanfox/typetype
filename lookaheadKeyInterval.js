@@ -37,28 +37,29 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var setText;
-            setText = elem.tagName.toLowerCase() === 'input' ? function(str) {
+            var setText, tag;
+            tag = elem.tagName.toLowerCase();
+            setText = tag === 'input' || tag === 'textarea' ? function(str) {
               return elem.value = str;
             } : function(str) {
               return elem.innerHTML = str;
             };
             return $.Deferred(function(deferred) {
-              var updateChar;
-              updateChar = function(index) {
+              var continueTo;
+              continueTo = function(index) {
                 setText(text.substr(0, index));
                 if (keypress != null) {
                   keypress.call(elem, index);
                 }
                 if (index < text.length) {
-                  return setTimeout(function() {
-                    return updateChar(index + 1);
-                  }, interval(index));
+                  return setTimeout((function() {
+                    return continueTo(index + 1);
+                  }), interval(index));
                 } else {
                   return deferred.resolve();
                 }
               };
-              return updateChar(1);
+              return continueTo(1);
             }).done(function() {
               return callback != null ? callback.call(elem) : void 0;
             });

@@ -6,9 +6,6 @@ $.fn.extend
   # callback: function() to be called when text has been inserted into each elem
   # keypress: function(index) called after every keypress
   typetype: (text, callback, keypress) ->
-
-    # TODO: simulate events... keydown, keyup, keypress, textInput etc.
-
     charDelay = 100
 
     # function returns the delay before the next character
@@ -27,33 +24,30 @@ $.fn.extend
         when lastchar is '\n' and nextchar isnt '\n' then 10
         else 2
 
-
     deferreds = for elem in @
       do (elem) ->
         # ensure we 'type' into the right thing
-        setText = if elem.tagName.toLowerCase() is 'input'
+        # TODO: simulate events... keydown, keypress, textInput, keyup (security?)
+        tag = elem.tagName.toLowerCase()
+        setText = if tag is 'input' or tag is 'textarea'
           (str) -> elem.value = str
         else
           (str) -> elem.innerHTML = str
 
-
-        $.Deferred( (deferred) ->
-          # do all the typing for the single textarea, `elem`
-          updateChar = (index) ->
+        return $.Deferred( (deferred) ->
+          continueTo = (index) ->
             # append one char
             setText(text.substr(0,index))
             keypress?.call(elem, index)
 
-            # timeout recurse
+            # timeout recursion
             if index < text.length
-              setTimeout () ->
-                updateChar(index+1)
-              , interval(index)  # interval depends on position in string
+              setTimeout (()-> continueTo(index+1)), interval(index)
             else
               deferred.resolve()
 
           # start it all off immediately!
-          updateChar(1)
+          continueTo(1)
         ).done(() -> callback?.call(elem))
 
     # combined promise of all of them
