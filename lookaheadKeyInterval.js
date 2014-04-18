@@ -8,23 +8,28 @@
     typetype: function(text) {
       var charDelay, deferreds, interval, t;
       charDelay = 100;
-      interval = function(limit) {
+      interval = function(index) {
         var lastchar, nextchar;
-        lastchar = text[limit - 1];
-        nextchar = text[limit];
-        if (lastchar === '.' || lastchar === '!') {
-          return 9 * charDelay;
-        }
-        if (lastchar === ',' || lastchar === ';') {
-          return 4 * charDelay;
-        }
-        if (lastchar === ' ') {
-          return 2 * charDelay;
-        }
-        if (lastchar === '\n' && nextchar !== '\n') {
-          return 5 * charDelay;
-        }
-        return 2 * charDelay * Math.random();
+        lastchar = text[index - 1];
+        nextchar = text[index];
+        return Math.random() * charDelay * (function() {
+          switch (lastchar) {
+            case nextchar:
+              return 1.6;
+            case '.':
+            case '!':
+              return 16;
+            case ',':
+            case ';':
+              return 8;
+            case ' ':
+              return 3;
+            case lastchar === '\n' && nextchar !== '\n':
+              return 10;
+            default:
+              return 2;
+          }
+        })();
       };
       deferreds = (function() {
         var _i, _len, _results;

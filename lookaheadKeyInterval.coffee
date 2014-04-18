@@ -8,21 +8,22 @@ $.fn.extend
 
     charDelay = 100
 
-    interval = (limit) -> # avg interval = 100
-      lastchar = text[limit-1]
-      nextchar = text[limit]
+    # function returns the delay before the next character
+    interval = (index) ->
+      lastchar = text[index-1]
+      nextchar = text[index]
+      return Math.random()*charDelay * switch lastchar
+        # fast repeat keys
+        when nextchar then 1.6
+        # pause after punctuation
+        when '.', '!' then 16
+        when ',', ';' then 8
+        # pause for spaces
+        when ' ' then 3
+        # pause at the end of lots of newlines
+        when lastchar is '\n' and nextchar isnt '\n' then 10
+        else 2
 
-      # pause after punctuation
-      if lastchar in ['.', '!'] then return 9*charDelay
-      if lastchar in [',', ';'] then return 4*charDelay
-
-      # pause for spaces
-      if lastchar is ' ' then return 2*charDelay
-
-      # pause at at end of enters.
-      if lastchar is '\n' and nextchar isnt '\n' then return 5*charDelay
-
-      return 2*charDelay*Math.random()
 
     deferreds = for t in @
       do (t) ->
