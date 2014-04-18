@@ -3,16 +3,21 @@
 </head>
 <body>
 
-<textarea></textarea>
-<textarea></textarea>
+<textarea class="a"></textarea>
+<textarea class="a"></textarea>
+
+<br />
+<textarea class="b"></textarea>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="simple.js"></script>
 <script type="text/javascript">
 $(function(){
-  $('textarea').typetype('Hello, world!').done(function(){
-    alert('typetypes done')
+  $('textarea.a').typetype('Hello, world!').done(function(){
+    $('textarea.b').typetype('Both finished!')
   })
+
+
 })
 </script>
 
