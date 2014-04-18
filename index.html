@@ -19,10 +19,14 @@ textarea {
 <script type="text/javascript" src="lookaheadKeyInterval.js"></script>
 <script type="text/javascript">
 $(function(){
-  $('textarea.a').focus().typetype('Hello, world! \n\n\n\nLorem ipsum dolor sit amet,\
-  consectetur adipiscing elit.\n\nDuis dapibus\n\naaaaaaaaa\n\nipsum aliquam luctus sagittis.\
-  ').done(function(){
-    $('textarea.b').typetype('Both finished!')
+  $('textarea.a').focus().typetype('Hello, world! \n\n\n\naaaaaaaaa\n\n\
+  ipsum aliquam luctus sagittis.\
+  ', function(){
+      console.debug(this)
+  }).done(function(){
+    $('textarea.b').typetype('Both finished!',null,function(index){
+      console.log(index)
+    })
   })
 
 

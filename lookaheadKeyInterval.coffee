@@ -1,10 +1,11 @@
-# Reference jQuery
-$ = jQuery
 
-# Adds plugin object to jQuery
+$ = jQuery
 $.fn.extend
-  # Change pluginName to your plugin's name.
-  typetype: (text) ->
+
+  # text: string to insert into every matched element
+  # callback: function() to be called when text has been inserted into each elem
+  # keypress: function(index) called after every keypress
+  typetype: (text, callback, keypress) ->
 
     charDelay = 100
 
@@ -33,6 +34,7 @@ $.fn.extend
           updateChar = (limit) ->
             # append one char
             $(t).html(text.substr(0,limit))
+            keypress?.call(t, limit)
 
             # timeout recurse
             if limit < text.length
@@ -44,7 +46,7 @@ $.fn.extend
 
           # start it all off immediately!
           updateChar(1)
-        )
+        ).done(() -> callback?.call(t))
 
     # combined promise of all of them
     return $.when(deferreds...) # ie $.when(d1, d2)   NOT   $.when([d1,d2])

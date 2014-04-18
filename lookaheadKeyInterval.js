@@ -5,7 +5,7 @@
   $ = jQuery;
 
   $.fn.extend({
-    typetype: function(text) {
+    typetype: function(text, callback, keypress) {
       var charDelay, deferreds, interval, t;
       charDelay = 100;
       interval = function(index) {
@@ -41,6 +41,9 @@
               var updateChar;
               updateChar = function(limit) {
                 $(t).html(text.substr(0, limit));
+                if (keypress != null) {
+                  keypress.call(t, limit);
+                }
                 if (limit < text.length) {
                   return setTimeout(function() {
                     return updateChar(limit + 1);
@@ -50,6 +53,8 @@
                 }
               };
               return updateChar(1);
+            }).done(function() {
+              return callback != null ? callback.call(t) : void 0;
             });
           })(t));
         }
