@@ -8,14 +8,20 @@
     typetype: function(text) {
       var textarea;
       textarea = this.first();
-      return $.Deferred((function(_this) {
-        return function(deferred) {
-          return setTimeout(function() {
-            textarea.html(text);
+      return $.Deferred(function(deferred) {
+        var updateText;
+        updateText = function(textarea, text, limit, deferred) {
+          textarea.text(text.substr(0, limit));
+          if (limit < text.length) {
+            return setTimeout(function() {
+              return updateText(textarea, text, limit + 1, deferred);
+            }, 100);
+          } else {
             return deferred.resolve();
-          }, 1000);
+          }
         };
-      })(this));
+        return updateText(textarea, text, 1, deferred);
+      });
     }
   });
 
