@@ -1,5 +1,11 @@
 <!doctype html><html dl><head>
 <title>TypeType</title>
+<style>
+textarea {
+  width:300px;
+  height:180px;
+}
+</style>
 </head>
 <body>
 
@@ -10,10 +16,12 @@
 <textarea class="b"></textarea>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="simple.js"></script>
+<script type="text/javascript" src="variableKeyInterval.js"></script>
 <script type="text/javascript">
 $(function(){
-  $('textarea.a').typetype('Hello, world!').done(function(){
+  $('textarea.a').focus().typetype('Hello, world! \n\n\n\nLorem ipsum dolor sit amet,\
+  consectetur adipiscing elit. \n\nDuis dapibus ipsum aliquam luctus sagittis.\
+  ').done(function(){
     $('textarea.b').typetype('Both finished!')
   })
 
