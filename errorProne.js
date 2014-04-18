@@ -6,8 +6,9 @@
 
   $.fn.extend({
     typetype: function(text, callback, keypress) {
-      var charDelay, deferreds, elem, interval;
+      var charDelay, deferreds, elem, errorProb, interval;
       charDelay = 100;
+      errorProb = 0.3;
       interval = function(index) {
         var lastchar, nextchar;
         lastchar = text[index - 1];
@@ -45,18 +46,38 @@
               return elem.innerHTML = str;
             };
             return $.Deferred(function(deferred) {
-              var continueTo;
+              var continueTo, makeMistake, recoverMistake;
+              makeMistake = function(index) {
+                setText(text.substr(0, index) + "X");
+                return setTimeout(function() {
+                  return recoverMistake(index, function() {
+                    return continueTo(index + 1);
+                  });
+                }, 2 * interval(index));
+              };
+              recoverMistake = function(index, cont) {
+                setText(text.substr(0, index));
+                return setTimeout((function() {
+                  return cont(index);
+                }), interval(index));
+              };
               continueTo = function(index) {
                 setText(text.substr(0, index));
                 if (keypress != null) {
                   keypress.call(elem, index);
                 }
                 if (index < text.length) {
-                  return setTimeout((function() {
-                    return continueTo(index + 1);
-                  }), interval(index));
+                  if (Math.random() < errorProb) {
+                    setTimeout((function() {
+                      return makeMistake(index);
+                    }), interval(index));
+                  } else {
+                    setTimeout((function() {
+                      return continueTo(index + 1);
+                    }), interval(index));
+                  }
                 } else {
-                  return deferred.resolve();
+                  deferred.resolve();
                 }
               };
               return continueTo(1);

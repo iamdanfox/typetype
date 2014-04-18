@@ -7,6 +7,7 @@ $.fn.extend
   # keypress: function(index) called after every keypress
   typetype: (text, callback, keypress) ->
     charDelay = 100
+    errorProb = 0.3
 
     # function returns the delay before the next character
     interval = (index) ->
@@ -35,6 +36,18 @@ $.fn.extend
           (str) -> elem.innerHTML = str
 
         return $.Deferred( (deferred) ->
+
+          makeMistake = (index) ->
+            # TODO.. swap pairs of characters, mistype one
+            setText(text.substr(0,index)+"X") # TODO: more clever errors.
+            setTimeout ()->
+              recoverMistake(index, ()->continueTo(index+1))
+            , 2*interval(index) # TODO: error timing
+
+          recoverMistake = (index, cont) ->
+            setText(text.substr(0,index))
+            setTimeout (()->cont(index)), interval(index) # TODO error timing
+
           continueTo = (index) ->
             # append one char
             setText(text.substr(0,index))
@@ -42,10 +55,15 @@ $.fn.extend
 
             # timeout recursion
             if index < text.length
-              # TODO either proceed or make a mistake and queue a recovery
-              setTimeout (()-> continueTo(index+1)), interval(index)
+              if Math.random() < errorProb
+                # TODO. different timing logic for mistakes?
+                setTimeout (() -> makeMistake(index)), interval(index)
+              else
+                setTimeout (()-> continueTo(index+1)), interval(index)
             else
               deferred.resolve()
+
+            return
 
           # start it all off immediately!
           continueTo(1)
