@@ -5,20 +5,27 @@ $ = jQuery
 $.fn.extend
   # Change pluginName to your plugin's name.
   typetype: (text) ->
-    # temporary hack, just work on the first
-    textarea = @.first() #TODO figure out whether it's an input or a textarea
 
-    return $.Deferred( (deferred) ->
+    deferreds = for t in @
+      do (t) ->
+        $.Deferred( (deferred) ->
 
-      updateText = (textarea, text, limit, deferred) ->
-        textarea.text(text.substr(0,limit))
-        if limit < text.length
-          setTimeout(() ->
-            updateText(textarea, text, limit+1, deferred)
-          ,100)
-        else
-          deferred.resolve()
+          # do all the typing for the single `t`
+          updateChar = (limit) ->
+            # append one char
+            $(t).html(text.substr(0,limit))
 
-      updateText(textarea, text, 1, deferred)
+            # timeout recurse
+            if limit < text.length
+              setTimeout(() ->
+                updateChar(limit+1)
+              ,100)
+            else
+              deferred.resolve()
 
-    )
+          # start it all off immediately!
+          updateChar(1)
+        )
+
+    # combined promise of all of them
+    return $.when(deferreds...) # ie $.when(d1, d2)   NOT   $.when([d1,d2])
