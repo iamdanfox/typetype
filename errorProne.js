@@ -38,50 +38,49 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var setText, tag;
+            var continueTo, deferred, makeMistake, recoverMistake, setText, tag;
             tag = elem.tagName.toLowerCase();
             setText = tag === 'input' || tag === 'textarea' ? function(str) {
               return elem.value = str;
             } : function(str) {
               return elem.innerHTML = str;
             };
-            return $.Deferred(function(deferred) {
-              var continueTo, makeMistake, recoverMistake;
-              makeMistake = function(index) {
-                setText(text.substr(0, index) + "X");
-                return setTimeout(function() {
-                  return recoverMistake(index, function() {
-                    return continueTo(index + 1);
-                  });
-                }, 2 * interval(index));
-              };
-              recoverMistake = function(index, cont) {
-                setText(text.substr(0, index));
-                return setTimeout((function() {
-                  return cont(index);
-                }), interval(index));
-              };
-              continueTo = function(index) {
-                setText(text.substr(0, index));
-                if (keypress != null) {
-                  keypress.call(elem, index);
-                }
-                if (index < text.length) {
-                  if (Math.random() < errorProb) {
-                    setTimeout((function() {
-                      return makeMistake(index);
-                    }), interval(index));
-                  } else {
-                    setTimeout((function() {
-                      return continueTo(index + 1);
-                    }), interval(index));
-                  }
+            makeMistake = function(index) {
+              setText(text.substr(0, index) + "X");
+              return setTimeout(function() {
+                return recoverMistake(index, function() {
+                  return continueTo(index + 1);
+                });
+              }, 2 * interval(index));
+            };
+            recoverMistake = function(index, cont) {
+              setText(text.substr(0, index));
+              return setTimeout((function() {
+                return cont(index);
+              }), interval(index));
+            };
+            deferred = $.Deferred();
+            continueTo = function(index) {
+              setText(text.substr(0, index));
+              if (keypress != null) {
+                keypress.call(elem, index);
+              }
+              if (index < text.length) {
+                if (Math.random() < errorProb) {
+                  setTimeout((function() {
+                    return makeMistake(index);
+                  }), interval(index));
                 } else {
-                  deferred.resolve();
+                  setTimeout((function() {
+                    return continueTo(index + 1);
+                  }), interval(index));
                 }
-              };
-              return continueTo(1);
-            }).done(function() {
+              } else {
+                deferred.resolve();
+              }
+            };
+            continueTo(1);
+            return deferred.done(function() {
               return callback != null ? callback.call(elem) : void 0;
             });
           })(elem));

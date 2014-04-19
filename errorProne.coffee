@@ -35,39 +35,40 @@ $.fn.extend
         else
           (str) -> elem.innerHTML = str
 
-        return $.Deferred( (deferred) ->
+        makeMistake = (index) ->
+          # TODO.. swap pairs of characters, mistype one
+          setText(text.substr(0,index)+"X") # TODO: more clever errors.
+          setTimeout ()->
+            recoverMistake(index, ()->continueTo(index+1))
+          , 2*interval(index) # TODO: error timing
 
-          makeMistake = (index) ->
-            # TODO.. swap pairs of characters, mistype one
-            setText(text.substr(0,index)+"X") # TODO: more clever errors.
-            setTimeout ()->
-              recoverMistake(index, ()->continueTo(index+1))
-            , 2*interval(index) # TODO: error timing
+        recoverMistake = (index, cont) ->
+          setText(text.substr(0,index))
+          setTimeout (()->cont(index)), interval(index) # TODO error timing
 
-          recoverMistake = (index, cont) ->
-            setText(text.substr(0,index))
-            setTimeout (()->cont(index)), interval(index) # TODO error timing
+        deferred = $.Deferred()
 
-          continueTo = (index) ->
-            # append one char
-            setText(text.substr(0,index))
-            keypress?.call(elem, index)
+        continueTo = (index) ->
+          # append one char
+          setText(text.substr(0,index))
+          keypress?.call(elem, index)
 
-            # timeout recursion
-            if index < text.length
-              if Math.random() < errorProb
-                # TODO. different timing logic for mistakes?
-                setTimeout (() -> makeMistake(index)), interval(index)
-              else
-                setTimeout (()-> continueTo(index+1)), interval(index)
+          # timeout recursion
+          if index < text.length
+            if Math.random() < errorProb
+              # TODO. different timing logic for mistakes?
+              setTimeout (() -> makeMistake(index)), interval(index)
             else
-              deferred.resolve()
+              setTimeout (()-> continueTo(index+1)), interval(index)
+          else
+            deferred.resolve()
 
-            return
+          return
 
-          # start it all off immediately!
-          continueTo(1)
-        ).done(() -> callback?.call(elem))
+        # start it all off immediately!
+        continueTo(1)
+
+        return deferred.done(() -> callback?.call(elem))
 
     # combined promise of all of them
     return $.when(deferreds...) # ie $.when(d1, d2)   NOT   $.when([d1,d2])
