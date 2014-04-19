@@ -56,22 +56,22 @@
             if txt.length > i
               r = Math.random() / errorProb
               afterErr = -> setTimeout (-> typeTo i), interval i
-              switch
-                # omit character, recover after
-                when 0.3>r and txt[i-1] isnt txt[i]
-                  append txt.substr(i,4), -> backsp 4, afterErr
-                when 0.5>r and txt[i-1] isnt txt[i]
-                  append txt.substr(i,1), -> backsp 1, afterErr
-                # swap two characters
-                when 0.8>r and txt[i-1] isnt txt[i]
-                  append txt[i]+txt[i-1], -> backsp 2, afterErr
-                # hold shift too long
-                when 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
-                  append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
-                else
-                  typeChar txt[i-1]
-                  keypress?.call elem, i
-                  setTimeout (-> typeTo i+1), interval(i)
+
+              # omit character, recover after
+              if 0.3>r and txt[i-1] isnt txt[i]
+                append txt.substr(i,4), -> backsp 4, afterErr
+              else if 0.5>r and txt[i-1] isnt txt[i]
+                append txt.substr(i,1), -> backsp 1, afterErr
+              # swap two characters
+              else if 0.8>r and txt[i-1] isnt txt[i]
+                append txt[i]+txt[i-1], -> backsp 2, afterErr
+              # hold shift too long
+              else if 1.0>r and i>1 and txt[i-2] isnt txt[i-2].toLowerCase()
+                append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
+              else
+                typeChar txt[i-1]
+                keypress.call elem, i if keypress
+                setTimeout (-> typeTo i+1), interval(i)
             else
               deferred.resolve()
             return

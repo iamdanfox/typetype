@@ -61,35 +61,30 @@
                     return typeTo(i);
                   }), interval(i));
                 };
-                switch (false) {
-                  case !(0.3 > r && txt[i - 1] !== txt[i]):
-                    append(txt.substr(i, 4), function() {
-                      return backsp(4, afterErr);
-                    });
-                    break;
-                  case !(0.5 > r && txt[i - 1] !== txt[i]):
-                    append(txt.substr(i, 1), function() {
-                      return backsp(1, afterErr);
-                    });
-                    break;
-                  case !(0.8 > r && txt[i - 1] !== txt[i]):
-                    append(txt[i] + txt[i - 1], function() {
-                      return backsp(2, afterErr);
-                    });
-                    break;
-                  case !(1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()):
-                    append(txt[i - 1].toUpperCase() + txt[i], function() {
-                      return backsp(2, afterErr);
-                    });
-                    break;
-                  default:
-                    typeChar(txt[i - 1]);
-                    if (keypress != null) {
-                      keypress.call(elem, i);
-                    }
-                    setTimeout((function() {
-                      return typeTo(i + 1);
-                    }), interval(i));
+                if (0.3 > r && txt[i - 1] !== txt[i]) {
+                  append(txt.substr(i, 4), function() {
+                    return backsp(4, afterErr);
+                  });
+                } else if (0.5 > r && txt[i - 1] !== txt[i]) {
+                  append(txt.substr(i, 1), function() {
+                    return backsp(1, afterErr);
+                  });
+                } else if (0.8 > r && txt[i - 1] !== txt[i]) {
+                  append(txt[i] + txt[i - 1], function() {
+                    return backsp(2, afterErr);
+                  });
+                } else if (1.0 > r && i > 1 && txt[i - 2] !== txt[i - 2].toLowerCase()) {
+                  append(txt[i - 1].toUpperCase() + txt[i], function() {
+                    return backsp(2, afterErr);
+                  });
+                } else {
+                  typeChar(txt[i - 1]);
+                  if (keypress) {
+                    keypress.call(elem, i);
+                  }
+                  setTimeout((function() {
+                    return typeTo(i + 1);
+                  }), interval(i));
                 }
               } else {
                 deferred.resolve();
