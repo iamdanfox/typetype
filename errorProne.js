@@ -2,131 +2,79 @@
 (function() {
   var $;
 
-  $ = jQuery;
-
-  $.fn.extend({
-    typetype: function(txt, callback, keypress) {
-      var charDelay, deferreds, elem, errorProb, interval;
-      charDelay = 100;
-      errorProb = 0.04;
-      interval = function(index) {
-        var lastchar, nextchar;
-        lastchar = txt[index - 1];
-        nextchar = txt[index];
-        return Math.random() * charDelay * (function() {
-          switch (lastchar) {
-            case nextchar:
-              return 1.6;
-            case '.':
-            case '!':
-              return 12;
-            case ',':
-            case ';':
-              return 8;
-            case ' ':
-              return 3;
-            case '\n':
-              return 12;
-            default:
-              return 2;
-          }
-        })();
-      };
-      deferreds = (function() {
+  ($ = jQuery).fn.extend({
+    typetype: function(txt, keypress) {
+      var elem;
+      return $.when.apply($, (function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var append, backsp, deferred, delChar, tag, typeChar, typeTo;
-            if (tag = elem.tagName.toLowerCase() === 'input' || tag === 'textarea') {
-              typeChar = function(c) {
-                return elem.value += c;
-              };
-              delChar = function() {
-                return elem.value = elem.value.substr(0, elem.value.length - 1);
-              };
-            } else {
-              typeChar = function(c) {
-                return elem.innerHTML += c;
-              };
-              delChar = function() {
-                return elem.innerHTML = elem.innerHTML.substr(0, elem.innerHTML.length - 1);
-              };
-            }
+            var append, attr, backsp, deferred, typeTo;
+            attr = elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML';
             append = function(str, cont) {
-              if (str.length > 0) {
-                typeChar(str[0]);
-                return setTimeout((function() {
-                  return append(str.substr(1), cont);
-                }), charDelay);
+              if (str.length) {
+                elem[attr] += str[0];
+                setTimeout((function() {
+                  return append(str.slice(1), cont);
+                }), 100);
               } else {
-                return cont();
+                cont();
               }
             };
             backsp = function(num, cont) {
-              if (num > 0) {
-                delChar();
-                return setTimeout((function() {
+              if (num) {
+                elem[attr] = elem[attr].slice(0, -1);
+                setTimeout((function() {
                   return backsp(num - 1, cont);
-                }), 1.5 * charDelay);
+                }), 100);
               } else {
-                return cont();
+                cont();
               }
             };
-            deferred = $.Deferred();
-            typeTo = function(i) {
+            return deferred = $.Deferred((typeTo = function(i) {
               var afterErr, r;
-              if (i < txt.length) {
-                r = Math.random() / errorProb;
+              if (txt.length > i) {
+                r = Math.random();
                 afterErr = function() {
                   return setTimeout((function() {
                     return typeTo(i);
-                  }), interval(i));
+                  }), r * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
                 };
-                switch (false) {
-                  case !(r < 0.3 && txt[i - 1] !== txt[i]):
-                    append(txt.substr(i, 4), function() {
-                      return backsp(4, afterErr);
-                    });
-                    break;
-                  case !(r < 0.5 && txt[i - 1] !== txt[i]):
-                    append(txt.substr(i, 1), function() {
-                      return backsp(1, afterErr);
-                    });
-                    break;
-                  case !(r < 0.8 && txt[i - 1] !== txt[i]):
-                    append(txt[i] + txt[i - 1], function() {
-                      return backsp(2, afterErr);
-                    });
-                    break;
-                  case !(r < 1.0 && i > 1 && txt[i - 2].toUpperCase() === txt[i - 2]):
-                    append(txt[i - 1].toUpperCase() + txt[i], function() {
-                      return backsp(2, afterErr);
-                    });
-                    break;
-                  default:
-                    typeChar(txt[i - 1]);
-                    if (keypress != null) {
-                      keypress.call(elem, i);
-                    }
-                    setTimeout((function() {
-                      return typeTo(i + 1);
-                    }), interval(i));
+                if (0.04 * 0.3 > r && txt[i - 1] !== txt[i]) {
+                  append(txt.slice(i, i + 4), function() {
+                    return backsp(4, afterErr);
+                  });
+                } else if (0.04 * 0.5 > r && txt[i - 1] !== txt[i]) {
+                  append(txt[i], function() {
+                    return backsp(1, afterErr);
+                  });
+                } else if (0.04 * 0.8 > r && txt[i - 1] !== txt[i]) {
+                  append(txt[i] + txt[i - 1], function() {
+                    return backsp(2, afterErr);
+                  });
+                } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
+                  append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
+                    return backsp(5, afterErr);
+                  });
+                } else {
+                  elem[attr] += txt[i - 1];
+                  if (keypress) {
+                    keypress.call(elem, i);
+                  }
+                  setTimeout((function() {
+                    return typeTo(i + 1);
+                  }), r * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
                 }
               } else {
                 deferred.resolve();
               }
-            };
-            typeTo(1);
-            return deferred.done(function() {
-              return callback != null ? callback.call(elem) : void 0;
-            });
+            })(1));
           })(elem));
         }
         return _results;
-      }).call(this);
-      return $.when.apply($, deferreds);
+      }).call(this));
     }
   });
 
