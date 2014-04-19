@@ -41,7 +41,7 @@
           };
           return (typeTo = function(i) {
             var afterErr, len, r;
-            if (len = txt.length >= i) {
+            if ((len = txt.length) >= i) {
               afterErr = function() {
                 return setTimeout((function() {
                   return typeTo(i);
