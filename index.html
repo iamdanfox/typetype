@@ -3,51 +3,209 @@
 <style>
 body {
   text-align:center;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+  background:rgb(51,51,51);
 }
-textarea {
-  width:300px;
-  height:180px;
-  display:inline-block;
+#header {
+  position:absolute;
+  width:100%;
+  top:50%;margin-top:-210px;
+  -webkit-transition:all 1s;
+  opacity:0;
 }
-p.both-done {
-  color: #030;
-  background:#efe;
-  padding:0.4em;
-  display:none;
-  font-family:'Helvetica-Neue',Helvetica,sans-serif;
+.reveal #header {
+  margin-top:-270px;
+  opacity:0.3;
+}
+.reveal #header:hover {
+  opacity:0.9;
+  -webkit-transition:all 200ms;
+}
+#header, #header a {
+  height:40px;
+  color:white;
+  font-size:30px;
+  text-decoration:none;
+  font-family:'Helvetica Neue',Helvetica,sans-serif;
+}
+#header a:hover {
+  text-decoration:underline;
+}
+#header iframe {
+  position:absolute;
+  top:0.3em;
+  margin-lefT:0.5em;
+}
+.ta {
+position:absolute;
+right:50%;
+top:50%;
+margin-top:-210px;
+height:420px;
+width:420px;
+background:rgb(35,36,38);
+z-index:2;
+-webkit-transition:all 1s, color 400ms;
+}
+.textarea {
+  display:block;
+  background:none;
+  height:400px;
   width:400px;
-  margin: 0 auto;
-  white-space:pre-wrap;
+  padding:10px;
+  color:rgb(236,236,236);
+  font-size:130%;
+/*  border:1px solid rgb(171,202,243);*/
+  border:0;
+}
+.textarea.dim {
+color:rgba(236,236,236,0.3);
+}
+#rhs {
+  display:block;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin-top:-210px;
+  height:420px;
+  width:420px;
+  background:rgba(230,230,230,1);
+  white-space:pre;
+  -webkit-transition:all 1s;
+  font-size:80%;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  text-align:left;
+}
+#rhs #code {
+height:400px;
+width:400px;
+padding:10px;
+  background:none !important;
+}
+.ta {
+  margin-right:-210px;
+}
+#rhs {
+  margin-left:-210px;
+}
+.reveal .ta, .reveal #rhs {
+  margin-right:0px;
+  margin-left:0px;
+}
+#secondhalf {
+  display:none;
+}
+#usage {
+  position:absolute;
+  display:block;
+  border:0;
+  background:rgb(209,141,249);
+  background:#bdb;
+  color:#030;
+  z-index:3;
+  display:block;
+  bottom:-70px;
+  left:15px;
+  width:380px;
+  height:3em;
+  padding:5px;
+  overflow:scroll;
+  white-space:pre;
+  opacity:0;
+  -webkit-transition:bottom 1s, opacity 200ms;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+#usage.show {
+  opacity:0.4;
+  bottom:15px;
+}
+#usage:hover {
+  opacity:1;
 }
 </style>
+
+
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+
 </head>
 <body>
 
-<textarea></textarea>
-<textarea></textarea>
-<p class="both-done">Both done</p>
+<div id="header">
+  typetype by <a href="http://twitter.com/iamdanfox">@iamdanfox</a>
+  <iframe src="http://ghbtns.com/github-btn.html?user=iamdanfox&amp;repo=typetype&amp;type=watch&amp;count=true"
+  allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+</div>
+
+<div class="ta">
+<textarea spellcheck="false" class="textarea"></textarea>
+</div>
+
+<div id="rhs">
+<div id="code">$('textarea').focus()
+  .typetype("Sometimes, it's really nice to simulate a human typing...", {
+    ms:1,
+    callback: function() {
+        $('body').addClass('reveal')
+    }
+  }).delay(1500)
+  .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
+<span id="secondhalf">  .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
+  .typetype("\n\nYou can make it fast... ",{
+    ms:60,
+    e:0
+  })
+  .typetype("or slow and error-prone.", {
+    ms:200,
+    e:0.2, // the default error rate is 0.04
+  })
+  .typetype("\n\n\nTry it out!")</span>
+</div>
+
+<textarea id="usage" title="Just 535 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
+&lt;script src="http://iamdanfox.github.io/typetype/typetype.min.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
+
+</div>
+
+
+<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="typetype.js"></script>
+<script type="text/javascript" src="typetype.min.js"></script>
 <script type="text/javascript">
 $(function(){
 
-  var a = $('textarea').first().
-    focus().
-    typetype("I am a pretty terrible typist.", {e:0.15}).
-    animate({width:'400px', fontSize:'30px'}, 500).
-    typetype("\n\nBut to be honest, I was made this way.", {e:0.1, callback: function(){console.log('bad typist finished');}})
+  hljs.configure({languages:['js']})
+  hljs.highlightBlock($('#code')[0])
 
-  var b = $('textarea').last().
-    typetype("I am a pretty great typist.", {e:0}).
-    animate({width:'400px', fontSize:'30px'}, 500).
-    typetype("\n\nI like to rub it in whenever I get the chance.")
+  $('#usage').click(function(){
+    this.focus()
+    this.select()
+  })
 
-  $(a,b).promise().done(function(){
-      $('.both-done').
-        slideDown().
-        typetype(", now for some hipster Lorem Ipsum:\n\nBanksy plaid vegan tote bag master cleanse Odd Future. Keytar pork belly umami XOXO plaid American Apparel, 8-bit Godard sustainable pour-over small batch Bushwick. Drinking vinegar Tumblr brunch, organic High Life put a bird on it milkshake. Plaid lo-fi raw denim farm-to-table, XOXO bitters viral dreamcatcher gluten-free fixie small batch brunch chillwave craft beer sriracha. Pickled trust fund selvage, disrupt vegan cliche Tumblr Truffaut normcore chambray selfies Pinterest. Pop-up keffiyeh Intelligentsia, McSweeney's selvage pork belly semiotics. Pickled bespoke Pinterest, seitan brunch normcore distillery salvia church-key Portland.")
+  $('.textarea').focus()
+    .typetype("Sometimes, it's really nice to simulate a human typing...", {
+      ms:1,
+      callback: function() {
+          $('body').addClass('reveal')
+      }
+    }).delay(1500)
+    .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
+    .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
+    .typetype("\n\nYou can make it fast... ",{
+      ms:60,
+      e:0
     })
+    .typetype("or slow and error-prone.", {
+      ms:200,
+      e:0.2, // the default error rate is 0.04
+      callback: function(){
+        $("#usage").addClass('show')
+      }
+    })
+    .typetype("\n\n\nTry it out!")
+
 })
 </script>
 
