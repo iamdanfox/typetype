@@ -4,9 +4,11 @@
 
   ($ = jQuery).fn.extend({
     typetype: function(txt, keypress) {
-      var interval;
+      var error, interval, keyint;
+      keyint = 100;
+      error = 0.04;
       interval = function(i) {
-        return Math.random() * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
+        return Math.random() * keyint * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
       };
       return this.each(function() {
         return $(this).queue(function() {
@@ -18,7 +20,7 @@
               elem[attr] += str[0];
               setTimeout((function() {
                 return append(str.slice(1), cont);
-              }), 100);
+              }), keyint);
             } else {
               cont();
             }
@@ -28,7 +30,7 @@
               elem[attr] = elem[attr].slice(0, -1);
               setTimeout((function() {
                 return backsp(num - 1, cont);
-              }), 100);
+              }), keyint);
             } else {
               cont();
             }
@@ -42,19 +44,19 @@
                 }), interval(i));
               };
               r = Math.random();
-              if (0.04 * 0.3 > r && txt[i - 1] !== txt[i] && i + 4 < len) {
+              if (error * 0.3 > r && txt[i - 1] !== txt[i] && i + 4 < len) {
                 append(txt.slice(i, i + 4), function() {
                   return backsp(4, afterErr);
                 });
-              } else if (0.04 * 0.5 > r && txt[i - 1] !== txt[i] && i < len) {
+              } else if (error * 0.5 > r && txt[i - 1] !== txt[i] && i < len) {
                 append(txt[i], function() {
                   return backsp(1, afterErr);
                 });
-              } else if (0.04 * 0.8 > r && txt[i - 1] !== txt[i] && i < len) {
+              } else if (error * 0.8 > r && txt[i - 1] !== txt[i] && i < len) {
                 append(txt[i] + txt[i - 1], function() {
                   return backsp(2, afterErr);
                 });
-              } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase() && i + 4 < len) {
+              } else if (error * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase() && i + 4 < len) {
                 append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
                   return backsp(5, afterErr);
                 });
