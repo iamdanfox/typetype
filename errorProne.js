@@ -78,29 +78,29 @@
             typeTo = function(i) {
               var afterErr, r;
               if (i < txt.length) {
-                r = Math.random();
+                r = Math.random() / errorProb;
                 afterErr = function() {
                   return setTimeout((function() {
                     return typeTo(i);
                   }), interval(i));
                 };
                 switch (false) {
-                  case !(r < 0.3 * errorProb && txt[i - 1] !== txt[i]):
+                  case !(r < 0.3 && txt[i - 1] !== txt[i]):
                     append(txt.substr(i, 4), function() {
                       return backsp(4, afterErr);
                     });
                     break;
-                  case !(r < 0.5 * errorProb && txt[i - 1] !== txt[i]):
+                  case !(r < 0.5 && txt[i - 1] !== txt[i]):
                     append(txt.substr(i, 1), function() {
                       return backsp(1, afterErr);
                     });
                     break;
-                  case !(r < 0.8 * errorProb && txt[i - 1] !== txt[i]):
+                  case !(r < 0.8 && txt[i - 1] !== txt[i]):
                     append(txt[i] + txt[i - 1], function() {
                       return backsp(2, afterErr);
                     });
                     break;
-                  case !(r < 1.0 * errorProb && i > 1 && txt[i - 2].toUpperCase() === txt[i - 2]):
+                  case !(r < 1.0 && i > 1 && txt[i - 2].toUpperCase() === txt[i - 2]):
                     append(txt[i - 1].toUpperCase() + txt[i], function() {
                       return backsp(2, afterErr);
                     });
