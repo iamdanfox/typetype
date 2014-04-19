@@ -4,10 +4,7 @@
 
   ($ = jQuery).fn.extend({
     typetype: function(txt, keypress) {
-      var elem, interval;
-      interval = function(index) {
-        return Math.random() * 100 * (txt[index - 1] === txt[index] ? 1.6 : txt[index - 1] === '.' ? 12 : txt[index - 1] === '!' ? 12 : txt[index - 1] === '\n' ? 12 : txt[index - 1] === ',' ? 8 : txt[index - 1] === ';' ? 8 : txt[index - 1] === ' ' ? 3 : 2);
-      };
+      var elem;
       return $.when.apply($, (function() {
         var _i, _len, _results;
         _results = [];
@@ -43,7 +40,9 @@
                 afterErr = function() {
                   return setTimeout((function() {
                     return typeTo(i);
-                  }), interval(i));
+                  }), (function(i) {
+                    return Math.random() * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
+                  })(i));
                 };
                 if (0.04 * 0.3 > r && txt[i - 1] !== txt[i]) {
                   append(txt.slice(i, i + 4), function() {
@@ -68,7 +67,9 @@
                   }
                   setTimeout((function() {
                     return typeTo(i + 1);
-                  }), interval(i));
+                  }), (function(i) {
+                    return Math.random() * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
+                  })(i));
                 }
               } else {
                 deferred.resolve();

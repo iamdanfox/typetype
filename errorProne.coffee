@@ -4,19 +4,6 @@
   # keypress: function(index) called after every (correct) keypress
   typetype: (txt, keypress) ->
 
-    # function returns the delay before the next character
-    interval = (index) ->
-      return Math.random() * 100 * (
-        if txt[index-1] is txt[index] then 1.6
-        else if txt[index-1] is '.' then 12
-        else if txt[index-1] is '!' then 12
-        else if txt[index-1] is '\n' then 12
-        else if txt[index-1] is ',' then 8
-        else if txt[index-1] is ';' then 8
-        else if txt[index-1] is ' ' then 3
-        else 2
-      )
-
     # combined promise of all of them
     # return $.when deferreds... # ie $.when(d1, d2)   NOT   $.when([d1,d2])
     return $.when.apply($, for elem in @
@@ -47,7 +34,16 @@
           (typeTo = (i) ->
             if txt.length > i
               r = Math.random()
-              afterErr = -> setTimeout (-> typeTo i), interval i
+              afterErr = -> setTimeout (-> typeTo i), do (i) -> return Math.random() * 100 * (
+                  if txt[i-1] is txt[i] then 1.6
+                  else if txt[i-1] is '.' then 12
+                  else if txt[i-1] is '!' then 12
+                  else if txt[i-1] is '\n' then 12
+                  else if txt[i-1] is ',' then 8
+                  else if txt[i-1] is ';' then 8
+                  else if txt[i-1] is ' ' then 3
+                  else 2
+                )
 
               # omit character, recover after
               if 0.04 * 0.3>r and txt[i-1] isnt txt[i]
@@ -63,7 +59,16 @@
               else
                 elem[attr] += txt[i-1]
                 keypress.call elem, i if keypress
-                setTimeout (-> typeTo i+1), interval(i)
+                setTimeout (-> typeTo i+1), do (i) -> return Math.random() * 100 * (
+                    if txt[i-1] is txt[i] then 1.6
+                    else if txt[i-1] is '.' then 12
+                    else if txt[i-1] is '!' then 12
+                    else if txt[i-1] is '\n' then 12
+                    else if txt[i-1] is ',' then 8
+                    else if txt[i-1] is ';' then 8
+                    else if txt[i-1] is ' ' then 3
+                    else 2
+                  )
             else
               deferred.resolve()
             return
