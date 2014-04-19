@@ -4,8 +4,7 @@
 
   ($ = jQuery).fn.extend({
     typetype: function(txt, keypress) {
-      var elem, errorProb, interval;
-      errorProb = 0.04;
+      var elem, interval;
       interval = function(index) {
         return Math.random() * 100 * (txt[index - 1] === txt[index] ? 1.6 : txt[index - 1] === '.' ? 12 : txt[index - 1] === '!' ? 12 : txt[index - 1] === '\n' ? 12 : txt[index - 1] === ',' ? 8 : txt[index - 1] === ';' ? 8 : txt[index - 1] === ' ' ? 3 : 2);
       };
@@ -40,25 +39,25 @@
             return deferred = $.Deferred((typeTo = function(i) {
               var afterErr, r;
               if (txt.length > i) {
-                r = Math.random() / errorProb;
+                r = Math.random();
                 afterErr = function() {
                   return setTimeout((function() {
                     return typeTo(i);
                   }), interval(i));
                 };
-                if (0.3 > r && txt[i - 1] !== txt[i]) {
+                if (0.04 * 0.3 > r && txt[i - 1] !== txt[i]) {
                   append(txt.slice(i, i + 3), function() {
                     return backsp(4, afterErr);
                   });
-                } else if (0.5 > r && txt[i - 1] !== txt[i]) {
+                } else if (0.04 * 0.5 > r && txt[i - 1] !== txt[i]) {
                   append(txt[i], function() {
                     return backsp(1, afterErr);
                   });
-                } else if (0.8 > r && txt[i - 1] !== txt[i]) {
+                } else if (0.04 * 0.8 > r && txt[i - 1] !== txt[i]) {
                   append(txt[i] + txt[i - 1], function() {
                     return backsp(2, afterErr);
                   });
-                } else if (1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
+                } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
                   append(txt[i - 1].toUpperCase() + txt[i], function() {
                     return backsp(2, afterErr);
                   });

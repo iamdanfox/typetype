@@ -3,7 +3,6 @@
   # callback: function() to be called when txt has been inserted into each elem
   # keypress: function(index) called after every (correct) keypress
   typetype: (txt, keypress) ->
-    errorProb = 0.04
 
     # function returns the delay before the next character
     interval = (index) ->
@@ -47,19 +46,19 @@
         return deferred = $.Deferred(
           (typeTo = (i) ->
             if txt.length > i
-              r = Math.random() / errorProb
+              r = Math.random()
               afterErr = -> setTimeout (-> typeTo i), interval i
 
               # omit character, recover after
-              if 0.3>r and txt[i-1] isnt txt[i]
+              if 0.04 * 0.3>r and txt[i-1] isnt txt[i]
                 append txt.slice(i,i+3), -> backsp 4, afterErr
-              else if 0.5>r and txt[i-1] isnt txt[i]
+              else if 0.04 * 0.5>r and txt[i-1] isnt txt[i]
                 append txt[i], -> backsp 1, afterErr
               # swap two characters
-              else if 0.8>r and txt[i-1] isnt txt[i]
+              else if 0.04 * 0.8>r and txt[i-1] isnt txt[i]
                 append txt[i]+txt[i-1], -> backsp 2, afterErr
               # hold shift too long
-              else if 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
+              else if 0.04 * 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
                 append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
               else
                 elem[attr] += txt[i-1]
