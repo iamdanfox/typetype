@@ -6,33 +6,29 @@
 
   $.fn.extend({
     typetype: function(txt, callback, keypress) {
-      var charDelay, deferreds, elem, errorProb, interval;
+      var charDelay, elem, errorProb, interval;
       charDelay = 100;
       errorProb = 0.04;
       interval = function(index) {
-        var lastchar, nextchar;
-        lastchar = txt[index - 1];
-        nextchar = txt[index];
         return Math.random() * charDelay * (function() {
-          switch (lastchar) {
-            case nextchar:
+          switch (txt[index - 1]) {
+            case txt[index]:
               return 1.6;
             case '.':
             case '!':
+            case '\n':
               return 12;
             case ',':
             case ';':
               return 8;
             case ' ':
               return 3;
-            case '\n':
-              return 12;
             default:
               return 2;
           }
         })();
       };
-      deferreds = (function() {
+      return $.when.apply($, (function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
@@ -55,52 +51,52 @@
               };
             }
             append = function(str, cont) {
-              if (str.length > 0) {
+              if (str.length) {
                 typeChar(str[0]);
-                return setTimeout((function() {
+                setTimeout((function() {
                   return append(str.substr(1), cont);
                 }), charDelay);
               } else {
-                return cont();
+                cont();
               }
             };
             backsp = function(num, cont) {
-              if (num > 0) {
+              if (num) {
                 delChar();
-                return setTimeout((function() {
+                setTimeout((function() {
                   return backsp(num - 1, cont);
-                }), 1.5 * charDelay);
+                }), charDelay);
               } else {
-                return cont();
+                cont();
               }
             };
             deferred = $.Deferred();
-            typeTo = function(i) {
+            (typeTo = function(i) {
               var afterErr, r;
-              if (i < txt.length) {
+              if (txt.length > i) {
                 r = Math.random() / errorProb;
                 afterErr = function() {
                   return setTimeout((function() {
-                    return typeTo(i);
+                    typeTo(i);
                   }), interval(i));
                 };
                 switch (false) {
-                  case !(r < 0.3 && txt[i - 1] !== txt[i]):
+                  case !(0.3 > r && txt[i - 1] !== txt[i]):
                     append(txt.substr(i, 4), function() {
                       return backsp(4, afterErr);
                     });
                     break;
-                  case !(r < 0.5 && txt[i - 1] !== txt[i]):
+                  case !(0.5 > r && txt[i - 1] !== txt[i]):
                     append(txt.substr(i, 1), function() {
                       return backsp(1, afterErr);
                     });
                     break;
-                  case !(r < 0.8 && txt[i - 1] !== txt[i]):
+                  case !(0.8 > r && txt[i - 1] !== txt[i]):
                     append(txt[i] + txt[i - 1], function() {
                       return backsp(2, afterErr);
                     });
                     break;
-                  case !(r < 1.0 && i > 1 && txt[i - 2].toUpperCase() === txt[i - 2]):
+                  case !(1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()):
                     append(txt[i - 1].toUpperCase() + txt[i], function() {
                       return backsp(2, afterErr);
                     });
@@ -117,16 +113,14 @@
               } else {
                 deferred.resolve();
               }
-            };
-            typeTo(1);
+            })(1);
             return deferred.done(function() {
               return callback != null ? callback.call(elem) : void 0;
             });
           })(elem));
         }
         return _results;
-      }).call(this);
-      return $.when.apply($, deferreds);
+      }).call(this));
     }
   });
 
