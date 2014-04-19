@@ -2,10 +2,8 @@
 (function() {
   var $;
 
-  $ = jQuery;
-
-  $.fn.extend({
-    typetype: function(txt, callback, keypress) {
+  ($ = jQuery).fn.extend({
+    typetype: function(txt, keypress) {
       var charDelay, elem, errorProb, interval;
       charDelay = 100;
       errorProb = 0.04;
@@ -34,8 +32,8 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var append, backsp, deferred, delChar, tag, typeChar, typeTo;
-            if (tag = elem.tagName.toLowerCase() === 'input' || tag === 'textarea') {
+            var append, backsp, deferred, delChar, typeChar, typeTo;
+            if (elem.tagName.toLowerCase() === 'input' || elem.tagName.toLowerCase() === 'textarea') {
               typeChar = function(c) {
                 return elem.value += c;
               };
@@ -70,14 +68,13 @@
                 cont();
               }
             };
-            deferred = $.Deferred();
-            (typeTo = function(i) {
+            return deferred = $.Deferred((typeTo = function(i) {
               var afterErr, r;
               if (txt.length > i) {
                 r = Math.random() / errorProb;
                 afterErr = function() {
                   return setTimeout((function() {
-                    typeTo(i);
+                    return typeTo(i);
                   }), interval(i));
                 };
                 switch (false) {
@@ -113,10 +110,7 @@
               } else {
                 deferred.resolve();
               }
-            })(1);
-            return deferred.done(function() {
-              return callback != null ? callback.call(elem) : void 0;
-            });
+            })(1));
           })(elem));
         }
         return _results;

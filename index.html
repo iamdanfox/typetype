@@ -17,16 +17,14 @@ textarea {
 <textarea class="b"></textarea>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="e.min.js"></script>
+<script type="text/javascript" src="errorProne.js"></script>
 <script type="text/javascript">
 $(function(){
   $('#myInput').typetype('This is some typing!')
   $('textarea.a').focus().typetype('The quick brown fox jumps over the lazy dog.\
   \n\n\n\naaaaaaaaa\n\n\
-  Lorem ipsum aliquam luctus sagittis.', function(){
-      console.debug(this)
-  }).done(function(){
-    $('textarea.b').typetype('Both finished!',null,function(index){
+  Lorem ipsum aliquam luctus sagittis.').done(function(){
+    $('textarea.b').typetype('Both finished!',function(index){
       console.log(index)
     })
   })
