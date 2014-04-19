@@ -1,36 +1,31 @@
-
 $ = jQuery
 $.fn.extend
-
-  # text: string to insert into every matched element
-  # callback: function() to be called when text has been inserted into each elem
+  # txt: string to insert into every matched element
+  # callback: function() to be called when txt has been inserted into each elem
   # keypress: function(index) called after every (correct) keypress
-  typetype: (text, callback, keypress) ->
+  typetype: (txt, callback, keypress) ->
     charDelay = 100
-    errorProb = 0.05
+    errorProb = 0.04
 
     # function returns the delay before the next character
     interval = (index) ->
-      lastchar = text[index-1]
-      nextchar = text[index]
+      lastchar = txt[index-1]
+      nextchar = txt[index]
       return Math.random()*charDelay * switch lastchar
         # fast repeat keys
         when nextchar then 1.6
         # pause after punctuation
-        when '.', '!' then 16
+        when '.', '!' then 12
         when ',', ';' then 8
         # pause for spaces
         when ' ' then 3
         # pause at the end of lots of newlines
-        when lastchar is '\n' and nextchar isnt '\n' then 10
+        when '\n' then 12
         else 2
-
-    recoverMistakeInterval = 2*charDelay
 
     deferreds = for elem in @
       do (elem) ->
         # ensure we 'type' into the right thing
-        # TODO: simulate events... keydown, keypress, textInput, keyup (security?)
         if tag = elem.tagName.toLowerCase() is 'input' or tag is 'textarea'
           typeChar = (c) -> elem.value += c
           delChar = () ->
@@ -40,39 +35,46 @@ $.fn.extend
           delChar = () ->
             elem.innerHTML = elem.innerHTML.substr(0,elem.innerHTML.length-1)
 
-        append = (str, continuation) ->
+        append = (str, cont) ->
           if str.length > 0
             typeChar(str[0])
-            setTimeout (()->append(str.substr(1), continuation)), charDelay
+            setTimeout (()->append(str.substr(1), cont)), charDelay
           else
-            continuation()
+            cont()
 
-        backspace = (num, continuation) ->
+        backsp = (num, cont) ->
           if num > 0
             delChar()
-            setTimeout (()->backspace(num-1, continuation)), charDelay
+            setTimeout (()->backsp(num-1, cont)), 1.5*charDelay
           else
-            continuation()
+            cont()
 
         deferred = $.Deferred()
 
-        typeTo = (index) ->
-          if index < text.length
+        typeTo = (i) ->
+          if i < txt.length
             r = Math.random()
-            afterErr = () -> setTimeout (()-> typeTo(index)), interval(index)
+            afterErr = () -> setTimeout (()-> typeTo(i)), interval(i)
             switch
-              when r<errorProb*0.1 then append "XYZ", () -> backspace(3, afterErr)
-              when r<errorProb*0.4 then append "XY", () -> backspace(2, afterErr)
-              when r<errorProb then append "X", () -> backspace(1, afterErr)
+              # omit character, recover after
+              when r<0.3*errorProb and txt[i-1] isnt txt[i]
+                append txt.substr(i,4), () -> backsp(4, afterErr)
+              when r<0.5*errorProb and txt[i-1] isnt txt[i]
+                append txt.substr(i,1), () -> backsp(1, afterErr)
+              # swap two characters
+              when r<0.8*errorProb and txt[i-1] isnt txt[i]
+                append txt[i]+txt[i-1], () -> backsp(2, afterErr)
+              # hold shift too long
+              when r<1.0*errorProb and i>1 and txt[i-2].toUpperCase() is txt[i-2]
+                append txt[i-1].toUpperCase()+txt[i], () -> backsp(2, afterErr)
               else
-                typeChar(text[index-1])
-                keypress?.call(elem, index)
-                setTimeout (()-> typeTo(index+1)), interval(index)
+                typeChar(txt[i-1])
+                keypress?.call(elem, i)
+                setTimeout (()-> typeTo(i+1)), interval(i)
           else
             deferred.resolve()
           return
 
-        # start it all off immediately!
         typeTo(1)
 
         return deferred.done(() -> callback?.call(elem))
