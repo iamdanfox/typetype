@@ -34,7 +34,7 @@
           (typeTo = (i) ->
             if txt.length > i
               r = Math.random()
-              afterErr = -> setTimeout (-> typeTo i), do (i) -> return Math.random() * 100 * (
+              afterErr = -> setTimeout (-> typeTo i), r * 100 * (
                   if txt[i-1] is txt[i] then 1.6
                   else if txt[i-1] is '.' then 12
                   else if txt[i-1] is '!' then 12
@@ -55,11 +55,12 @@
                 append txt[i]+txt[i-1], -> backsp 2, afterErr
               # hold shift too long
               else if 0.04 * 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
-                append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
+                append txt[i-1].toUpperCase()+txt.slice(i,i+4), -> backsp 5, afterErr
               else
+                # just insert the correct character!
                 elem[attr] += txt[i-1]
                 keypress.call elem, i if keypress
-                setTimeout (-> typeTo i+1), do (i) -> return Math.random() * 100 * (
+                setTimeout (-> typeTo i+1), r * 100 * (
                     if txt[i-1] is txt[i] then 1.6
                     else if txt[i-1] is '.' then 12
                     else if txt[i-1] is '!' then 12

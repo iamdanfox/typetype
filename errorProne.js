@@ -40,9 +40,7 @@
                 afterErr = function() {
                   return setTimeout((function() {
                     return typeTo(i);
-                  }), (function(i) {
-                    return Math.random() * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
-                  })(i));
+                  }), r * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
                 };
                 if (0.04 * 0.3 > r && txt[i - 1] !== txt[i]) {
                   append(txt.slice(i, i + 4), function() {
@@ -57,8 +55,8 @@
                     return backsp(2, afterErr);
                   });
                 } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
-                  append(txt[i - 1].toUpperCase() + txt[i], function() {
-                    return backsp(2, afterErr);
+                  append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
+                    return backsp(5, afterErr);
                   });
                 } else {
                   elem[attr] += txt[i - 1];
@@ -67,9 +65,7 @@
                   }
                   setTimeout((function() {
                     return typeTo(i + 1);
-                  }), (function(i) {
-                    return Math.random() * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
-                  })(i));
+                  }), r * 100 * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
                 }
               } else {
                 deferred.resolve();
