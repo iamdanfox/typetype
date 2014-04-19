@@ -47,7 +47,7 @@ background:rgb(35,36,38);
 z-index:2;
 -webkit-transition:all 1s, color 400ms;
 }
-textarea {
+.textarea {
   display:block;
   background:none;
   height:400px;
@@ -58,18 +58,17 @@ textarea {
 /*  border:1px solid rgb(171,202,243);*/
   border:0;
 }
-textarea.dim {
+.textarea.dim {
 color:rgba(236,236,236,0.3);
 }
-#code {
+#rhs {
   display:block;
   position:absolute;
   left:50%;
   top:50%;
   margin-top:-210px;
-  height:400px;
-  width:400px;
-  padding:10px;
+  height:420px;
+  width:420px;
   background:rgba(230,230,230,1);
   white-space:pre;
   -webkit-transition:all 1s;
@@ -78,18 +77,51 @@ color:rgba(236,236,236,0.3);
   text-overflow: ellipsis;
   text-align:left;
 }
+#rhs #code {
+height:400px;
+width:400px;
+padding:10px;
+  background:none !important;
+}
 .ta {
   margin-right:-210px;
 }
-#code {
+#rhs {
   margin-left:-210px;
 }
-.reveal .ta, .reveal #code {
+.reveal .ta, .reveal #rhs {
   margin-right:0px;
   margin-left:0px;
 }
 #secondhalf {
   display:none;
+}
+#usage {
+  position:absolute;
+  display:block;
+  border:0;
+  background:rgb(209,141,249);
+  background:#bdb;
+  color:#030;
+  z-index:3;
+  display:block;
+  bottom:-70px;
+  left:15px;
+  width:380px;
+  height:3em;
+  padding:5px;
+  overflow:scroll;
+  white-space:pre;
+  opacity:0;
+  -webkit-transition:bottom 1s, opacity 200ms;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+#usage.show {
+  opacity:0.4;
+  bottom:15px;
+}
+#usage:hover {
+  opacity:1;
 }
 </style>
 
@@ -102,14 +134,15 @@ color:rgba(236,236,236,0.3);
 
 <div id="header">
   typetype by <a href="http://twitter.com/iamdanfox">@iamdanfox</a>
-  <iframe src="http://ghbtns.com/github-btn.html?user=iamdanfox&amp;repo=anno.js&amp;type=watch&amp;count=true"
+  <iframe src="http://ghbtns.com/github-btn.html?user=iamdanfox&amp;repo=typetype&amp;type=watch&amp;count=true"
   allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
 </div>
 
 <div class="ta">
-<textarea spellcheck="false" ></textarea>
+<textarea spellcheck="false" class="textarea"></textarea>
 </div>
 
+<div id="rhs">
 <div id="code">$('textarea').focus()
   .typetype("Sometimes, it's really nice to simulate a human typing...", {
     ms:1,
@@ -119,18 +152,21 @@ color:rgba(236,236,236,0.3);
   }).delay(1500)
   .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
 <span id="secondhalf">  .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
-  .typetype("\n\nYou can make it type fast... ",{
+  .typetype("\n\nYou can make it fast... ",{
     ms:60,
     e:0
   })
-  .typetype("or really, really slowly.", {
-    ms:250,
-    e:0.2
-  })</span>
+  .typetype("or slow and error-prone.", {
+    ms:200,
+    e:0.2, // the default error rate is 0.04
+  })
+  .typetype("\n\n\nTry it out!")</span>
 </div>
 
+<textarea id="usage" title="Just 535 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
+&lt;script src="http://iamdanfox.github.io/typetype/typetype.min.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
 
-
+</div>
 
 
 <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
@@ -143,7 +179,12 @@ $(function(){
   hljs.configure({languages:['js']})
   hljs.highlightBlock($('#code')[0])
 
-  $('textarea').focus()
+  $('#usage').click(function(){
+    this.focus()
+    this.select()
+  })
+
+  $('.textarea').focus()
     .typetype("Sometimes, it's really nice to simulate a human typing...", {
       ms:1,
       callback: function() {
@@ -152,14 +193,18 @@ $(function(){
     }).delay(1500)
     .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
     .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
-    .typetype("\n\nYou can make it type fast... ",{
+    .typetype("\n\nYou can make it fast... ",{
       ms:60,
       e:0
     })
-    .typetype("or really, really slowly.", {
-      ms:250,
-      e:0.2
+    .typetype("or slow and error-prone.", {
+      ms:200,
+      e:0.2, // the default error rate is 0.04
+      callback: function(){
+        $("#usage").addClass('show')
+      }
     })
+    .typetype("\n\n\nTry it out!")
 
 })
 </script>
