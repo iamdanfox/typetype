@@ -24,21 +24,19 @@
     return $.when.apply($, for elem in @
       do (elem) ->
         # ensure we 'type' into the right thing
-        if elem.tagName.toLowerCase() is 'input' or elem.tagName.toLowerCase() is 'textarea'
-          typeChar = (c) ->
-            elem.value += c
-          delChar = ->
-            elem.value = elem.value.substr 0, elem.value.length-1
+        attr = if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase()
+          'value'
         else
-          typeChar = (c) ->
-            elem.innerHTML += c
-          delChar = ->
-            elem.innerHTML = elem.innerHTML.substr 0, elem.innerHTML.length-1
+          'innerHTML'
+
+        typeChar = (c) -> elem[attr] += c
+
+        delChar = -> elem[attr] = elem[attr].slice 0, -1
 
         append = (str, cont) ->
           if str.length # > 0
             typeChar str[0]
-            setTimeout (-> append str.substr(1), cont), charDelay
+            setTimeout (-> append str.slice(1), cont), charDelay
           else
             cont()
           return
@@ -59,14 +57,14 @@
 
               # omit character, recover after
               if 0.3>r and txt[i-1] isnt txt[i]
-                append txt.substr(i,4), -> backsp 4, afterErr
+                append txt.slice(i,i+3), -> backsp 4, afterErr
               else if 0.5>r and txt[i-1] isnt txt[i]
-                append txt.substr(i,1), -> backsp 1, afterErr
+                append txt[i], -> backsp 1, afterErr
               # swap two characters
               else if 0.8>r and txt[i-1] isnt txt[i]
                 append txt[i]+txt[i-1], -> backsp 2, afterErr
               # hold shift too long
-              else if 1.0>r and i>1 and txt[i-2] isnt txt[i-2].toLowerCase()
+              else if 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
                 append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
               else
                 typeChar txt[i-1]

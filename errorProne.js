@@ -16,27 +16,19 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var append, backsp, deferred, delChar, typeChar, typeTo;
-            if (elem.tagName.toLowerCase() === 'input' || elem.tagName.toLowerCase() === 'textarea') {
-              typeChar = function(c) {
-                return elem.value += c;
-              };
-              delChar = function() {
-                return elem.value = elem.value.substr(0, elem.value.length - 1);
-              };
-            } else {
-              typeChar = function(c) {
-                return elem.innerHTML += c;
-              };
-              delChar = function() {
-                return elem.innerHTML = elem.innerHTML.substr(0, elem.innerHTML.length - 1);
-              };
-            }
+            var append, attr, backsp, deferred, delChar, typeChar, typeTo;
+            attr = elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML';
+            typeChar = function(c) {
+              return elem[attr] += c;
+            };
+            delChar = function() {
+              return elem[attr] = elem[attr].slice(0, -1);
+            };
             append = function(str, cont) {
               if (str.length) {
                 typeChar(str[0]);
                 setTimeout((function() {
-                  return append(str.substr(1), cont);
+                  return append(str.slice(1), cont);
                 }), charDelay);
               } else {
                 cont();
@@ -62,18 +54,18 @@
                   }), interval(i));
                 };
                 if (0.3 > r && txt[i - 1] !== txt[i]) {
-                  append(txt.substr(i, 4), function() {
+                  append(txt.slice(i, i + 3), function() {
                     return backsp(4, afterErr);
                   });
                 } else if (0.5 > r && txt[i - 1] !== txt[i]) {
-                  append(txt.substr(i, 1), function() {
+                  append(txt[i], function() {
                     return backsp(1, afterErr);
                   });
                 } else if (0.8 > r && txt[i - 1] !== txt[i]) {
                   append(txt[i] + txt[i - 1], function() {
                     return backsp(2, afterErr);
                   });
-                } else if (1.0 > r && i > 1 && txt[i - 2] !== txt[i - 2].toLowerCase()) {
+                } else if (1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
                   append(txt[i - 1].toUpperCase() + txt[i], function() {
                     return backsp(2, afterErr);
                   });
