@@ -7,7 +7,7 @@ $.fn.extend
   # keypress: function(index) called after every keypress
   typetype: (text, callback, keypress) ->
     charDelay = 100
-    errorProb = 0.3
+    errorProb = 0.05
 
     # function returns the delay before the next character
     interval = (index) ->
@@ -25,32 +25,47 @@ $.fn.extend
         when lastchar is '\n' and nextchar isnt '\n' then 10
         else 2
 
+    recoverMistakeInterval = 2*charDelay
+
     deferreds = for elem in @
       do (elem) ->
         # ensure we 'type' into the right thing
         # TODO: simulate events... keydown, keypress, textInput, keyup (security?)
         tag = elem.tagName.toLowerCase()
-        setText = if tag is 'input' or tag is 'textarea'
-          (str) -> elem.value = str
+        if tag is 'input' or tag is 'textarea'
+          typeChar = (c) -> elem.value += c
+          delChar = () ->
+            elem.value = elem.value.substr(0,elem.value.length-1)
         else
-          (str) -> elem.innerHTML = str
+          typeChar = (c) -> elem.innerHTML += c
+          backspace = () ->
+            elem.innerHTML = elem.innerHTML.substr(0,elem.innerHTML.length-1)
 
         makeMistake = (index) ->
           # TODO.. swap pairs of characters, mistype one
-          setText(text.substr(0,index)+"X") # TODO: more clever errors.
-          setTimeout ()->
-            recoverMistake(index, ()->continueTo(index+1))
-          , 2*interval(index) # TODO: error timing
+          appendString "XYZ", () -> backspace(3, () -> continueTo index+1) # backspace will then continue
 
-        recoverMistake = (index, cont) ->
-          setText(text.substr(0,index))
-          setTimeout (()->cont(index)), interval(index) # TODO error timing
+        appendString = (toInsert, continuation) ->
+          if toInsert.length > 0
+            typeChar(toInsert[0])
+            setTimeout () ->
+              appendString(toInsert.substr(1), continuation)
+            , charDelay
+          else
+            continuation()
+
+        backspace = (num, continuation) ->
+          if num > 0
+            delChar()
+            setTimeout (()->backspace(num-1, continuation)), charDelay
+          else
+            continuation()
 
         deferred = $.Deferred()
 
         continueTo = (index) ->
           # append one char
-          setText(text.substr(0,index))
+          typeChar(text[index-1])
           keypress?.call(elem, index)
 
           # timeout recursion
