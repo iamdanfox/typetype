@@ -3,51 +3,115 @@
 <style>
 body {
   text-align:center;
+  font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+  background:rgb(51,51,51);
 }
 textarea {
-  width:300px;
-  height:180px;
-  display:inline-block;
-}
-p.both-done {
-  color: #030;
-  background:#efe;
-  padding:0.4em;
-  display:none;
-  font-family:'Helvetica-Neue',Helvetica,sans-serif;
+  display:block;
+  position:absolute;
+  right:50%;
+  top:50%;
+  margin-top:-210px;
+  height:400px;
   width:400px;
-  margin: 0 auto;
-  white-space:pre-wrap;
+  padding:10px;
+  background:rgb(35,36,38);
+  color:rgb(236,236,236);
+  font-size:130%;
+/*  border:1px solid rgb(171,202,243);*/
+  border:0;
+  z-index:2;
+  -webkit-transition:all 1s;
+}
+#code {
+  display:block;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin-top:-210px;
+  height:400px;
+  width:400px;
+  padding:10px;
+  background:rgba(230,230,230,1);
+  white-space:pre;
+  -webkit-transition:all 1s;
+  font-size:80%;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  text-align:left;
+}
+textarea {
+  margin-right:-210px;
+}
+#code {
+  margin-left:-210px;
+}
+.reveal textarea, .reveal #code {
+  margin-right:0px;
+  margin-left:0px;
 }
 </style>
+
+
+
+<link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+
 </head>
 <body>
 
-<textarea></textarea>
-<textarea></textarea>
-<p class="both-done">Both done</p>
+<textarea spellcheck="false"></textarea>
+
+<div id="code">
+$('textarea').focus().
+  typetype("Sometimes, it's really nice to simulate a human typing...", {
+    callback: function() {
+        $('body').addClass('reveal')
+    }
+  }).
+  delay(1000).
+  typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
+</div>
+
+
+
+
+
+<script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="typetype.js"></script>
+<script type="text/javascript" src="typetype.min.js"></script>
 <script type="text/javascript">
 $(function(){
 
-  var a = $('textarea').first().
-    focus().
-    typetype("I am a pretty terrible typist.", {e:0.15}).
-    animate({width:'400px', fontSize:'30px'}, 500).
-    typetype("\n\nBut to be honest, I was made this way.", {e:0.1, callback: function(){console.log('bad typist finished');}})
+  hljs.configure({languages:['js']})
+  hljs.highlightBlock($('#code')[0])
 
-  var b = $('textarea').last().
-    typetype("I am a pretty great typist.", {e:0}).
-    animate({width:'400px', fontSize:'30px'}, 500).
-    typetype("\n\nI like to rub it in whenever I get the chance.")
-
-  $(a,b).promise().done(function(){
-      $('.both-done').
-        slideDown().
-        typetype(", now for some hipster Lorem Ipsum:\n\nBanksy plaid vegan tote bag master cleanse Odd Future. Keytar pork belly umami XOXO plaid American Apparel, 8-bit Godard sustainable pour-over small batch Bushwick. Drinking vinegar Tumblr brunch, organic High Life put a bird on it milkshake. Plaid lo-fi raw denim farm-to-table, XOXO bitters viral dreamcatcher gluten-free fixie small batch brunch chillwave craft beer sriracha. Pickled trust fund selvage, disrupt vegan cliche Tumblr Truffaut normcore chambray selfies Pinterest. Pop-up keffiyeh Intelligentsia, McSweeney's selvage pork belly semiotics. Pickled bespoke Pinterest, seitan brunch normcore distillery salvia church-key Portland.")
-    })
+  $('textarea').focus().
+    typetype("Sometimes, it's really nice to simulate a human typing...", {
+      ms:1,
+      callback: function() {
+          $('body').addClass('reveal')
+      }
+    }).
+    delay(1500).
+    typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
+//
+//   var a = $('textarea').first().
+//     focus().
+//     typetype("I am a pretty terrible typist.", {e:0.15}).
+//     animate({width:'400px', fontSize:'30px'}, 500).
+//     typetype("\n\nBut to be honest, I was made this way.", {e:0.1, callback: function(){console.log('bad typist finished');}})
+//
+//   var b = $('textarea').last().
+//     typetype("I am a pretty great typist.", {e:0}).
+//     animate({width:'400px', fontSize:'30px'}, 500).
+//     typetype("\n\nI like to rub it in whenever I get the chance.")
+//
+//   $(a,b).promise().done(function(){
+//       $('.both-done').
+//         slideDown().
+//         typetype(", now for some hipster Lorem Ipsum:\n\nBanksy plaid vegan tote bag master cleanse Odd Future. Keytar pork belly umami XOXO plaid American Apparel, 8-bit Godard sustainable pour-over small batch Bushwick. Drinking vinegar Tumblr brunch, organic High Life put a bird on it milkshake. Plaid lo-fi raw denim farm-to-table, XOXO bitters viral dreamcatcher gluten-free fixie small batch brunch chillwave craft beer sriracha. Pickled trust fund selvage, disrupt vegan cliche Tumblr Truffaut normcore chambray selfies Pinterest. Pop-up keffiyeh Intelligentsia, McSweeney's selvage pork belly semiotics. Pickled bespoke Pinterest, seitan brunch normcore distillery salvia church-key Portland.")
+//     })
 })
 </script>
 
