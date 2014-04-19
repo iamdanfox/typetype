@@ -4,75 +4,87 @@
   # keypress: function(index) called after every (correct) keypress
   typetype: (txt, keypress) ->
 
-    # combined promise of all of them
-    # return $.when deferreds... # ie $.when(d1, d2)   NOT   $.when([d1,d2])
-    return $.when.apply($, for elem in @
-      do (elem) ->
-        # ensure we 'type' into the right thing
-        attr = if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase()
-          'value'
-        else
-          'innerHTML'
+    interval = (i) -> Math.random() * 100 * (
+        if txt[i-1] is txt[i] then 1.6
+        else if txt[i-1] is '.' then 12
+        else if txt[i-1] is '!' then 12
+        else if txt[i-1] is '\n' then 12
+        else if txt[i-1] is ',' then 8
+        else if txt[i-1] is ';' then 8
+        else if txt[i-1] is ' ' then 3
+        else 2
+      )
 
-        append = (str, cont) ->
-          if str.length # > 0
-            elem[attr] += str[0]
-            setTimeout (-> append str.slice(1), cont), 100
-          else
-            cont()
-          return
+    return @each () ->
 
-        backsp = (num, cont) ->
-          if num # > 0
-            elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
-            setTimeout (-> backsp num-1, cont), 100
-          else
-            cont()
-          return
+      $(this).queue () ->
+        console.log 'f called'
+        elem = this
+        # console.debug this
+        setTimeout( () ->
+          elem.value += txt
+          $(elem).dequeue()
+        , Math.random()*3000)
 
-        deferred = $.Deferred(
-          (typeTo = (i) ->
-            if txt.length > i
-              r = Math.random()
-              afterErr = -> setTimeout (-> typeTo i), r * 100 * (
-                  if txt[i-1] is txt[i] then 1.6
-                  else if txt[i-1] is '.' then 12
-                  else if txt[i-1] is '!' then 12
-                  else if txt[i-1] is '\n' then 12
-                  else if txt[i-1] is ',' then 8
-                  else if txt[i-1] is ';' then 8
-                  else if txt[i-1] is ' ' then 3
-                  else 2
-                )
 
-              # omit character, recover after
-              if 0.04 * 0.3>r and txt[i-1] isnt txt[i]
-                append txt.slice(i,i+4), -> backsp 4, afterErr
-              else if 0.04 * 0.5>r and txt[i-1] isnt txt[i]
-                append txt[i], -> backsp 1, afterErr
-              # swap two characters
-              else if 0.04 * 0.8>r and txt[i-1] isnt txt[i]
-                append txt[i]+txt[i-1], -> backsp 2, afterErr
-              # hold shift too long
-              else if 0.04 * 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
-                append txt[i-1].toUpperCase()+txt.slice(i,i+4), -> backsp 5, afterErr
-              else
-                # just insert the correct character!
-                elem[attr] += txt[i-1]
-                keypress.call elem, i if keypress
-                setTimeout (-> typeTo i+1), r * 100 * (
-                    if txt[i-1] is txt[i] then 1.6
-                    else if txt[i-1] is '.' then 12
-                    else if txt[i-1] is '!' then 12
-                    else if txt[i-1] is '\n' then 12
-                    else if txt[i-1] is ',' then 8
-                    else if txt[i-1] is ';' then 8
-                    else if txt[i-1] is ' ' then 3
-                    else 2
-                  )
-            else
-              deferred.resolve()
-            return
-          )(1)
-        )
-    )
+
+
+
+
+    #
+    #
+    #
+    # # combined promise of all of them
+    # # return $.when deferreds... # ie $.when(d1, d2)   NOT   $.when([d1,d2])
+    # return $.when.apply($, for elem in @
+    #   do (elem) ->
+    #     # ensure we 'type' into the right thing
+    #     attr = if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase()
+    #       'value'
+    #     else
+    #       'innerHTML'
+    #
+    #     append = (str, cont) ->
+    #       if str.length # > 0
+    #         elem[attr] += str[0]
+    #         setTimeout (-> append str.slice(1), cont), 100
+    #       else
+    #         cont()
+    #       return
+    #
+    #     backsp = (num, cont) ->
+    #       if num # > 0
+    #         elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
+    #         setTimeout (-> backsp num-1, cont), 100
+    #       else
+    #         cont()
+    #       return
+    #
+    #     deferred = $.Deferred(
+    #       (typeTo = (i) ->
+    #         if txt.length > i
+    #           r = Math.random()
+    #           afterErr = -> setTimeout (-> typeTo i), interval(i)
+    #
+    #           # omit character, recover after
+    #           if 0.04 * 0.3>r and txt[i-1] isnt txt[i]
+    #             append txt.slice(i,i+4), -> backsp 4, afterErr
+    #           else if 0.04 * 0.5>r and txt[i-1] isnt txt[i]
+    #             append txt[i], -> backsp 1, afterErr
+    #           # swap two characters
+    #           else if 0.04 * 0.8>r and txt[i-1] isnt txt[i]
+    #             append txt[i]+txt[i-1], -> backsp 2, afterErr
+    #           # hold shift too long
+    #           else if 0.04 * 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
+    #             append txt[i-1].toUpperCase()+txt.slice(i,i+4), -> backsp 5, afterErr
+    #           else
+    #             # just insert the correct character!
+    #             elem[attr] += txt[i-1]
+    #             keypress.call elem, i if keypress
+    #             setTimeout (-> typeTo i+1), interval(i)
+    #         else
+    #           deferred.resolve()
+    #         return
+    #       )(1)
+    #     )
+    # )
