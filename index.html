@@ -36,7 +36,7 @@ $(function(){
     focus().
     typetype("I am a pretty terrible typist.", {e:0.15}).
     animate({width:'400px', fontSize:'30px'}, 500).
-    typetype("\n\nBut to be honest, I was made this way.", {e:0.1})
+    typetype("\n\nBut to be honest, I was made this way.", {e:0.1, callback: function(){console.log('bad typist finished');}})
 
   var b = $('textarea').last().
     typetype("I am a pretty great typist.", {e:0}).
