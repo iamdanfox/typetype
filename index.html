@@ -1,42 +1,53 @@
 <!doctype html><html dl><head>
 <title>TypeType</title>
 <style>
+body {
+  text-align:center;
+}
 textarea {
   width:300px;
   height:180px;
-  display:block;
+  display:inline-block;
+}
+p.both-done {
+  color: #030;
+  background:#efe;
+  padding:0.4em;
+  display:none;
+  font-family:'Helvetica-Neue',Helvetica,sans-serif;
+  width:400px;
+  margin: 0 auto;
+  white-space:pre-wrap;
 }
 </style>
 </head>
 <body>
 
-<textarea class="a"></textarea>
-<textarea class="a"></textarea>
-<input type="text" id="myInput" />
-
+<textarea></textarea>
+<textarea></textarea>
+<p class="both-done">Both done</p>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-<script type="text/javascript" src="errorProne.js"></script>
+<script type="text/javascript" src="typetype.js"></script>
 <script type="text/javascript">
 $(function(){
-  $('textarea').
-    typetype("Here's some text.").
-    animate({width:'200px'}).
-    typetype(" Here's more!").
-    promise().done(function(){
-      console.log('all done')
+
+  var a = $('textarea').first().
+    focus().
+    typetype("I am a pretty terrible typist.", {e:0.15}).
+    animate({width:'400px', fontSize:'30px'}, 500).
+    typetype("\n\nBut to be honest, I was made this way.", {e:0.1})
+
+  var b = $('textarea').last().
+    typetype("I am a pretty great typist.", {e:0}).
+    animate({width:'400px', fontSize:'30px'}, 500).
+    typetype("\n\nI like to rub it in whenever I get the chance.")
+
+  $(a,b).promise().done(function(){
+      $('.both-done').
+        slideDown().
+        typetype(", now for some hipster Lorem Ipsum:\n\nBanksy plaid vegan tote bag master cleanse Odd Future. Keytar pork belly umami XOXO plaid American Apparel, 8-bit Godard sustainable pour-over small batch Bushwick. Drinking vinegar Tumblr brunch, organic High Life put a bird on it milkshake. Plaid lo-fi raw denim farm-to-table, XOXO bitters viral dreamcatcher gluten-free fixie small batch brunch chillwave craft beer sriracha. Pickled trust fund selvage, disrupt vegan cliche Tumblr Truffaut normcore chambray selfies Pinterest. Pop-up keffiyeh Intelligentsia, McSweeney's selvage pork belly semiotics. Pickled bespoke Pinterest, seitan brunch normcore distillery salvia church-key Portland.")
     })
-
-
-  // $('textarea.a').focus().typetype('The quick brown fox jumps over the lazy dog.\
-  // \nThe The The The The The\nThe\n\naaaaaaaaa\n\n\
-  // Lorem ipsum aliquam luctus sagittis.').done(function(){
-  //   $('textarea.b').typetype('Both finished!',function(index){
-  //     console.log(index)
-  //   })
-  // })
-
-
 })
 </script>
 

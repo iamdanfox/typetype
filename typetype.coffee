@@ -46,10 +46,11 @@
           return
 
         (typeTo = (i) ->
-          if len = txt.length >= i
+          if (len = txt.length) >= i
             afterErr = -> setTimeout (-> typeTo i), interval(i)
 
             r = Math.random()
+
             # omit character, recover after 4 more chars
             if settings.e * 0.3>r and txt[i-1] isnt txt[i] and i+4<len
               append txt.slice(i,i+4), -> backsp 4, afterErr
