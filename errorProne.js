@@ -34,27 +34,27 @@
             }
           };
           return (typeTo = function(i) {
-            var afterErr, r;
-            if (txt.length >= i) {
-              r = Math.random();
+            var afterErr, len, r;
+            if (len = txt.length >= i) {
               afterErr = function() {
                 return setTimeout((function() {
                   return typeTo(i);
                 }), interval(i));
               };
-              if (0.04 * 0.3 > r && txt[i - 1] !== txt[i]) {
+              r = Math.random();
+              if (0.04 * 0.3 > r && txt[i - 1] !== txt[i] && i + 4 < len) {
                 append(txt.slice(i, i + 4), function() {
                   return backsp(4, afterErr);
                 });
-              } else if (0.04 * 0.5 > r && txt[i - 1] !== txt[i]) {
+              } else if (0.04 * 0.5 > r && txt[i - 1] !== txt[i] && i < len) {
                 append(txt[i], function() {
                   return backsp(1, afterErr);
                 });
-              } else if (0.04 * 0.8 > r && txt[i - 1] !== txt[i]) {
+              } else if (0.04 * 0.8 > r && txt[i - 1] !== txt[i] && i < len) {
                 append(txt[i] + txt[i - 1], function() {
                   return backsp(2, afterErr);
                 });
-              } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase()) {
+              } else if (0.04 * 1.0 > r && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase() && i + 4 < len) {
                 append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
                   return backsp(5, afterErr);
                 });

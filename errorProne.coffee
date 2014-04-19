@@ -16,11 +16,12 @@
       )
 
     return @each () ->
-      $(this).queue () ->
+      $(this).queue () -> # this function goes into the 'fx' queue.
         elem = this
 
         # ensure we 'type' into the right thing
-        attr = if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase()
+        attr = if elem.tagName is 'input'.toUpperCase() or elem.tagName is
+            'textarea'.toUpperCase()
           'value'
         else
           'innerHTML'
@@ -42,21 +43,24 @@
           return
 
         (typeTo = (i) ->
-          if txt.length >= i
-            r = Math.random()
+          if len = txt.length >= i
             afterErr = -> setTimeout (-> typeTo i), interval(i)
 
-            # omit character, recover after
-            if 0.04 * 0.3>r and txt[i-1] isnt txt[i]
+            r = Math.random()
+            # omit character, recover after 4 more chars
+            if 0.04 * 0.3>r and txt[i-1] isnt txt[i] and i+4<len
               append txt.slice(i,i+4), -> backsp 4, afterErr
-            else if 0.04 * 0.5>r and txt[i-1] isnt txt[i]
+            # omit character, recover immediately
+            else if 0.04 * 0.5>r and txt[i-1] isnt txt[i] and i<len
               append txt[i], -> backsp 1, afterErr
             # swap two characters
-            else if 0.04 * 0.8>r and txt[i-1] isnt txt[i]
+            else if 0.04 * 0.8>r and txt[i-1] isnt txt[i] and i<len
               append txt[i]+txt[i-1], -> backsp 2, afterErr
             # hold shift too long
-            else if 0.04 * 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
-              append txt[i-1].toUpperCase()+txt.slice(i,i+4), -> backsp 5, afterErr
+            else if 0.04 * 1.0>r and i>1 and txt[i-2] is
+                txt[i-2].toUpperCase() and i+4<len
+              append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
+                backsp 5, afterErr
             else
               # just insert the correct character!
               elem[attr] += txt[i-1]
