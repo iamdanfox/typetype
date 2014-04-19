@@ -3,12 +3,11 @@
   # callback: function() to be called when txt has been inserted into each elem
   # keypress: function(index) called after every (correct) keypress
   typetype: (txt, keypress) ->
-    charDelay = 100
     errorProb = 0.04
 
     # function returns the delay before the next character
     interval = (index) ->
-      return Math.random() * charDelay * (
+      return Math.random() * 100 * (
         if txt[index-1] is txt[index] then 1.6
         else if txt[index-1] is '.' then 12
         else if txt[index-1] is '!' then 12
@@ -32,7 +31,7 @@
         append = (str, cont) ->
           if str.length # > 0
             elem[attr] += str[0]
-            setTimeout (-> append str.slice(1), cont), charDelay
+            setTimeout (-> append str.slice(1), cont), 100
           else
             cont()
           return
@@ -40,7 +39,7 @@
         backsp = (num, cont) ->
           if num # > 0
             elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
-            setTimeout (-> backsp num-1, cont), charDelay
+            setTimeout (-> backsp num-1, cont), 100
           else
             cont()
           return

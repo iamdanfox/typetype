@@ -4,11 +4,10 @@
 
   ($ = jQuery).fn.extend({
     typetype: function(txt, keypress) {
-      var charDelay, elem, errorProb, interval;
-      charDelay = 100;
+      var elem, errorProb, interval;
       errorProb = 0.04;
       interval = function(index) {
-        return Math.random() * charDelay * (txt[index - 1] === txt[index] ? 1.6 : txt[index - 1] === '.' ? 12 : txt[index - 1] === '!' ? 12 : txt[index - 1] === '\n' ? 12 : txt[index - 1] === ',' ? 8 : txt[index - 1] === ';' ? 8 : txt[index - 1] === ' ' ? 3 : 2);
+        return Math.random() * 100 * (txt[index - 1] === txt[index] ? 1.6 : txt[index - 1] === '.' ? 12 : txt[index - 1] === '!' ? 12 : txt[index - 1] === '\n' ? 12 : txt[index - 1] === ',' ? 8 : txt[index - 1] === ';' ? 8 : txt[index - 1] === ' ' ? 3 : 2);
       };
       return $.when.apply($, (function() {
         var _i, _len, _results;
@@ -23,7 +22,7 @@
                 elem[attr] += str[0];
                 setTimeout((function() {
                   return append(str.slice(1), cont);
-                }), charDelay);
+                }), 100);
               } else {
                 cont();
               }
@@ -33,7 +32,7 @@
                 elem[attr] = elem[attr].slice(0, -1);
                 setTimeout((function() {
                   return backsp(num - 1, cont);
-                }), charDelay);
+                }), 100);
               } else {
                 cont();
               }
