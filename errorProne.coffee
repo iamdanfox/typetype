@@ -29,13 +29,9 @@
         else
           'innerHTML'
 
-        typeChar = (c) -> elem[attr] += c
-
-        delChar = -> elem[attr] = elem[attr].slice 0, -1
-
         append = (str, cont) ->
           if str.length # > 0
-            typeChar str[0]
+            elem[attr] += str[0]
             setTimeout (-> append str.slice(1), cont), charDelay
           else
             cont()
@@ -43,7 +39,7 @@
 
         backsp = (num, cont) ->
           if num # > 0
-            delChar()
+            elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
             setTimeout (-> backsp num-1, cont), charDelay
           else
             cont()
@@ -67,7 +63,7 @@
               else if 1.0>r and i>1 and txt[i-2] is txt[i-2].toUpperCase()
                 append txt[i-1].toUpperCase()+txt[i], -> backsp 2, afterErr
               else
-                typeChar txt[i-1]
+                elem[attr] += txt[i-1]
                 keypress.call elem, i if keypress
                 setTimeout (-> typeTo i+1), interval(i)
             else

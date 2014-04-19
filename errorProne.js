@@ -16,17 +16,11 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var append, attr, backsp, deferred, delChar, typeChar, typeTo;
+            var append, attr, backsp, deferred, typeTo;
             attr = elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML';
-            typeChar = function(c) {
-              return elem[attr] += c;
-            };
-            delChar = function() {
-              return elem[attr] = elem[attr].slice(0, -1);
-            };
             append = function(str, cont) {
               if (str.length) {
-                typeChar(str[0]);
+                elem[attr] += str[0];
                 setTimeout((function() {
                   return append(str.slice(1), cont);
                 }), charDelay);
@@ -36,7 +30,7 @@
             };
             backsp = function(num, cont) {
               if (num) {
-                delChar();
+                elem[attr] = elem[attr].slice(0, -1);
                 setTimeout((function() {
                   return backsp(num - 1, cont);
                 }), charDelay);
@@ -70,7 +64,7 @@
                     return backsp(2, afterErr);
                   });
                 } else {
-                  typeChar(txt[i - 1]);
+                  elem[attr] += txt[i - 1];
                   if (keypress) {
                     keypress.call(elem, i);
                   }
