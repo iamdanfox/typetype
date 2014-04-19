@@ -1,7 +1,7 @@
 all: typetype.js
 
 typetype.js:
-	coffee -c typetype.coffee
+	coffee -cb typetype.coffee
 
 gz: typetype.js
 	uglifyjs typetype.js -cmo typetype.min.js

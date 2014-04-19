@@ -1,6 +1,6 @@
-($ = jQuery).fn.extend
+jQuery.fn.extend
   typetype: (txt, options) ->
-    settings = $.extend(
+    settings = jQuery.extend(
       keypress: () -> # `this` is bound to elem, first argument is index of text
       callback: () -> # `this` is bound to elem
       ms:100 # typing interval
@@ -22,7 +22,7 @@
 
     return @each ->
       elem = @
-      $(elem).queue -> # this function goes into the 'fx' queue.
+      jQuery(elem).queue -> # this function goes into the 'fx' queue.
 
         attr = if elem.tagName is 'input'.toUpperCase() or
             elem.tagName is 'textarea'.toUpperCase()
@@ -76,6 +76,6 @@
               setTimeout (-> typeTo i+1), interval(i)
           else
             settings.callback.call elem
-            $(elem).dequeue()
+            jQuery(elem).dequeue()
           return
         )(1)
