@@ -8,23 +8,7 @@
       charDelay = 100;
       errorProb = 0.04;
       interval = function(index) {
-        return Math.random() * charDelay * (function() {
-          switch (txt[index - 1]) {
-            case txt[index]:
-              return 1.6;
-            case '.':
-            case '!':
-            case '\n':
-              return 12;
-            case ',':
-            case ';':
-              return 8;
-            case ' ':
-              return 3;
-            default:
-              return 2;
-          }
-        })();
+        return Math.random() * charDelay * (txt[index - 1] === txt[index] ? 1.6 : txt[index - 1] === '.' ? 12 : txt[index - 1] === '!' ? 12 : txt[index - 1] === '\n' ? 12 : txt[index - 1] === ',' ? 8 : txt[index - 1] === ';' ? 8 : txt[index - 1] === ' ' ? 3 : 2);
       };
       return $.when.apply($, (function() {
         var _i, _len, _results;

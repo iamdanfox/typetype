@@ -8,15 +8,16 @@
 
     # function returns the delay before the next character
     interval = (index) ->
-      return Math.random() * charDelay * switch txt[index-1]
-        # fast repeat keys
-        when txt[index] then 1.6
-        # pause after punctuation and newlines
-        when '.', '!', '\n' then 12
-        when ',', ';' then 8
-        # pause for spaces
-        when ' ' then 3
+      return Math.random() * charDelay * (
+        if txt[index-1] is txt[index] then 1.6
+        else if txt[index-1] is '.' then 12
+        else if txt[index-1] is '!' then 12
+        else if txt[index-1] is '\n' then 12
+        else if txt[index-1] is ',' then 8
+        else if txt[index-1] is ';' then 8
+        else if txt[index-1] is ' ' then 3
         else 2
+      )
 
     # combined promise of all of them
     # return $.when deferreds... # ie $.when(d1, d2)   NOT   $.when([d1,d2])
