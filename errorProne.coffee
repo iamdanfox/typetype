@@ -4,7 +4,7 @@ $.fn.extend
 
   # text: string to insert into every matched element
   # callback: function() to be called when text has been inserted into each elem
-  # keypress: function(index) called after every keypress
+  # keypress: function(index) called after every (correct) keypress
   typetype: (text, callback, keypress) ->
     charDelay = 100
     errorProb = 0.05
@@ -31,26 +31,19 @@ $.fn.extend
       do (elem) ->
         # ensure we 'type' into the right thing
         # TODO: simulate events... keydown, keypress, textInput, keyup (security?)
-        tag = elem.tagName.toLowerCase()
-        if tag is 'input' or tag is 'textarea'
+        if tag = elem.tagName.toLowerCase() is 'input' or tag is 'textarea'
           typeChar = (c) -> elem.value += c
           delChar = () ->
             elem.value = elem.value.substr(0,elem.value.length-1)
         else
           typeChar = (c) -> elem.innerHTML += c
-          backspace = () ->
+          delChar = () ->
             elem.innerHTML = elem.innerHTML.substr(0,elem.innerHTML.length-1)
 
-        makeMistake = (index) ->
-          # TODO.. swap pairs of characters, mistype one
-          appendString "XYZ", () -> backspace(3, () -> continueTo index+1) # backspace will then continue
-
-        appendString = (toInsert, continuation) ->
-          if toInsert.length > 0
-            typeChar(toInsert[0])
-            setTimeout () ->
-              appendString(toInsert.substr(1), continuation)
-            , charDelay
+        append = (str, continuation) ->
+          if str.length > 0
+            typeChar(str[0])
+            setTimeout (()->append(str.substr(1), continuation)), charDelay
           else
             continuation()
 
@@ -63,25 +56,24 @@ $.fn.extend
 
         deferred = $.Deferred()
 
-        continueTo = (index) ->
-          # append one char
-          typeChar(text[index-1])
-          keypress?.call(elem, index)
-
-          # timeout recursion
+        typeTo = (index) ->
           if index < text.length
-            if Math.random() < errorProb
-              # TODO. different timing logic for mistakes?
-              setTimeout (() -> makeMistake(index)), interval(index)
-            else
-              setTimeout (()-> continueTo(index+1)), interval(index)
+            r = Math.random()
+            afterErr = () -> setTimeout (()-> typeTo(index)), interval(index)
+            switch
+              when r<errorProb*0.1 then append "XYZ", () -> backspace(3, afterErr)
+              when r<errorProb*0.4 then append "XY", () -> backspace(2, afterErr)
+              when r<errorProb then append "X", () -> backspace(1, afterErr)
+              else
+                typeChar(text[index-1])
+                keypress?.call(elem, index)
+                setTimeout (()-> typeTo(index+1)), interval(index)
           else
             deferred.resolve()
-
           return
 
         # start it all off immediately!
-        continueTo(1)
+        typeTo(1)
 
         return deferred.done(() -> callback?.call(elem))
 

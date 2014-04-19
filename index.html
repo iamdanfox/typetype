@@ -21,9 +21,9 @@ textarea {
 <script type="text/javascript">
 $(function(){
   $('#myInput').typetype('This is some typing!')
-  $('textarea.a').focus().typetype('Hello, world! \n\n\n\naaaaaaaaa\n\n\
-  ipsum aliquam luctus sagittis.\
-  ', function(){
+  $('textarea.a').focus().typetype('The quick brown fox jumps over the lazy dog.\
+  \n\n\n\naaaaaaaaa\n\n\
+  Lorem ipsum aliquam luctus sagittis.', function(){
       console.debug(this)
   }).done(function(){
     $('textarea.b').typetype('Both finished!',null,function(index){

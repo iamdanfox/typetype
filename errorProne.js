@@ -39,9 +39,8 @@
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           elem = this[_i];
           _results.push((function(elem) {
-            var appendString, backspace, continueTo, deferred, delChar, makeMistake, tag, typeChar;
-            tag = elem.tagName.toLowerCase();
-            if (tag === 'input' || tag === 'textarea') {
+            var append, backspace, deferred, delChar, tag, typeChar, typeTo;
+            if (tag = elem.tagName.toLowerCase() === 'input' || tag === 'textarea') {
               typeChar = function(c) {
                 return elem.value += c;
               };
@@ -52,23 +51,16 @@
               typeChar = function(c) {
                 return elem.innerHTML += c;
               };
-              backspace = function() {
+              delChar = function() {
                 return elem.innerHTML = elem.innerHTML.substr(0, elem.innerHTML.length - 1);
               };
             }
-            makeMistake = function(index) {
-              return appendString("XYZ", function() {
-                return backspace(3, function() {
-                  return continueTo(index + 1);
-                });
-              });
-            };
-            appendString = function(toInsert, continuation) {
-              if (toInsert.length > 0) {
-                typeChar(toInsert[0]);
-                return setTimeout(function() {
-                  return appendString(toInsert.substr(1), continuation);
-                }, charDelay);
+            append = function(str, continuation) {
+              if (str.length > 0) {
+                typeChar(str[0]);
+                return setTimeout((function() {
+                  return append(str.substr(1), continuation);
+                }), charDelay);
               } else {
                 return continuation();
               }
@@ -84,26 +76,45 @@
               }
             };
             deferred = $.Deferred();
-            continueTo = function(index) {
-              typeChar(text[index - 1]);
-              if (keypress != null) {
-                keypress.call(elem, index);
-              }
+            typeTo = function(index) {
+              var afterErr, r;
               if (index < text.length) {
-                if (Math.random() < errorProb) {
-                  setTimeout((function() {
-                    return makeMistake(index);
+                r = Math.random();
+                afterErr = function() {
+                  return setTimeout((function() {
+                    return typeTo(index);
                   }), interval(index));
-                } else {
-                  setTimeout((function() {
-                    return continueTo(index + 1);
-                  }), interval(index));
+                };
+                switch (false) {
+                  case !(r < errorProb * 0.1):
+                    append("XYZ", function() {
+                      return backspace(3, afterErr);
+                    });
+                    break;
+                  case !(r < errorProb * 0.4):
+                    append("XY", function() {
+                      return backspace(2, afterErr);
+                    });
+                    break;
+                  case !(r < errorProb):
+                    append("X", function() {
+                      return backspace(1, afterErr);
+                    });
+                    break;
+                  default:
+                    typeChar(text[index - 1]);
+                    if (keypress != null) {
+                      keypress.call(elem, index);
+                    }
+                    setTimeout((function() {
+                      return typeTo(index + 1);
+                    }), interval(index));
                 }
               } else {
                 deferred.resolve();
               }
             };
-            continueTo(1);
+            typeTo(1);
             return deferred.done(function() {
               return callback != null ? callback.call(elem) : void 0;
             });
