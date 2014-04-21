@@ -53,32 +53,32 @@ jQuery.fn.extend
             afterErr = -> setTimeout (-> typeTo i), interval(i)
             r = Math.random() / settings.e
 
-            # forgot to press shift
-            if r<0.5 and i<len and /[A-Z]/.test txt[i] #uppercase letter coming up
-              return append txt[i].toLowerCase(), -> backsp 1, afterErr
-
             # omit character, recover after 4 more chars
             if r<0.3 and txt[i-1] isnt txt[i] and i+4<len
-              return append txt.slice(i,i+4), -> backsp 4, afterErr
-
-            # omit character, recover immediately
-            if r<0.5 and txt[i-1] isnt txt[i] and i<len
-              return append txt[i], -> backsp 1, afterErr
-
-            # swap two characters
-            if r<0.8 and txt[i-1] isnt txt[i] and i<len
-              return append txt[i]+txt[i-1], -> backsp 2, afterErr
+              append txt.slice(i,i+4), -> backsp 4, afterErr
 
             # hold shift too long
-            if r<1.0 and i>1 and txt[i-2] is
-                txt[i-2].toUpperCase() and i+4<len
-              return append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
+            else if r<0.7 and i>1 and /[A-Z]/.test txt[i-2] and i+4<len
+              append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
                 backsp 5, afterErr
 
+            # omit character, recover immediately
+            else if r<0.5 and txt[i-1] isnt txt[i] and i<len
+              append txt[i], -> backsp 1, afterErr
+
+            # swap two characters
+            else if r<1.0 and txt[i-1] isnt txt[i] and i<len
+              append txt[i]+txt[i-1], -> backsp 2, afterErr
+
+            # forget to press shift
+            else if r<0.5 and /[A-Z]/.test txt[i]  #uppercase letter coming up
+              append txt[i].toLowerCase(), -> backsp 1, afterErr
+
             # just insert the correct character!
-            elem[attr] += txt[i-1]
-            settings.keypress.call elem
-            setTimeout (-> typeTo i+1), interval(i)
+            else
+              elem[attr] += txt[i-1]
+              settings.keypress.call elem
+              setTimeout (-> typeTo i+1), interval(i)
           else
             settings.callback.call elem
             jQuery(elem).dequeue()
