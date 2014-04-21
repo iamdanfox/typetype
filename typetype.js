@@ -20,6 +20,7 @@ jQuery.fn.extend({
         append = function(str, cont) {
           if (str) {
             elem[attr] += str[0];
+            settings.keypress.call(elem);
             setTimeout((function() {
               return append(str.slice(1), cont);
             }), settings.ms);
@@ -30,6 +31,7 @@ jQuery.fn.extend({
         backsp = function(num, cont) {
           if (num) {
             elem[attr] = elem[attr].slice(0, -1);
+            settings.keypress.call(elem);
             setTimeout((function() {
               return backsp(num - 1, cont);
             }), settings.ms);
@@ -64,7 +66,7 @@ jQuery.fn.extend({
               });
             } else {
               elem[attr] += txt[i - 1];
-              settings.keypress.call(elem, i);
+              settings.keypress.call(elem);
               setTimeout((function() {
                 return typeTo(i + 1);
               }), interval(i));
