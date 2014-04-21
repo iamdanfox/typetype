@@ -53,6 +53,10 @@ jQuery.fn.extend
             afterErr = -> setTimeout (-> typeTo i), interval(i)
             r = Math.random() / settings.e
 
+            # forgot to press shift
+            if r<0.5 and i<len and /[A-Z]/.test txt[i] #uppercase letter coming up
+              return append txt[i].toLowerCase(), -> backsp 1, afterErr
+
             # omit character, recover after 4 more chars
             if r<0.3 and txt[i-1] isnt txt[i] and i+4<len
               append txt.slice(i,i+4), -> backsp 4, afterErr

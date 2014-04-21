@@ -48,6 +48,11 @@ jQuery.fn.extend({
               }), interval(i));
             };
             r = Math.random() / settings.e;
+            if (r < 0.5 && i < len && /[A-Z]/.test(txt[i])) {
+              return append(txt[i].toLowerCase(), function() {
+                return backsp(1, afterErr);
+              });
+            }
             if (r < 0.3 && txt[i - 1] !== txt[i] && i + 4 < len) {
               append(txt.slice(i, i + 4), function() {
                 return backsp(4, afterErr);
