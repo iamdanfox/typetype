@@ -1,7 +1,7 @@
 jQuery.fn.extend
   typetype: (txt, options) ->
     settings = jQuery.extend(
-      keypress: () -> # `this` is bound to elem, first argument is index of text
+      keypress: () -> # `this` is bound to elem
       callback: () -> # `this` is bound to elem
       ms:100 # typing interval
       e:0.04 # error probability
@@ -33,6 +33,7 @@ jQuery.fn.extend
         append = (str, cont) ->
           if str # > 0
             elem[attr] += str[0]
+            settings.keypress.call elem
             setTimeout (-> append str.slice(1), cont), settings.ms
           else
             cont()
@@ -41,6 +42,7 @@ jQuery.fn.extend
         backsp = (num, cont) ->
           if num # > 0
             elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
+            settings.keypress.call elem
             setTimeout (-> backsp num-1, cont), settings.ms
           else
             cont()
@@ -72,7 +74,7 @@ jQuery.fn.extend
             # just insert the correct character!
             else
               elem[attr] += txt[i-1]
-              settings.keypress.call elem, i
+              settings.keypress.call elem
               setTimeout (-> typeTo i+1), interval(i)
           else
             settings.callback.call elem
