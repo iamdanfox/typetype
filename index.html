@@ -5,12 +5,14 @@ body {
   text-align:center;
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
   background:rgb(51,51,51);
+  margin:0;
 }
 #header {
   position:absolute;
   width:100%;
   top:50%;margin-top:-210px;
   -webkit-transition:all 1s;
+  transition:all 1s;
   opacity:0;
 }
 .reveal #header {
@@ -20,6 +22,7 @@ body {
 .reveal #header:hover {
   opacity:0.9;
   -webkit-transition:all 200ms;
+  transition:all 200ms;
 }
 #header, #header a {
   height:40px;
@@ -45,7 +48,9 @@ height:420px;
 width:420px;
 background:rgb(35,36,38);
 z-index:2;
--webkit-transition:all 1s, color 400ms;
+-webkit-transition:all 1s, color 400ms, outline 50ms;
+transition:all 1s, color 400ms, outline 50ms;
+overflow:hidden;
 }
 .textarea {
   display:block;
@@ -72,6 +77,7 @@ color:rgba(236,236,236,0.3);
   background:rgba(230,230,230,1);
   white-space:pre;
   -webkit-transition:all 1s;
+  -transition:all 1s;
   font-size:80%;
   overflow:hidden;
   text-overflow: ellipsis;
@@ -114,6 +120,7 @@ padding:10px;
   white-space:pre;
   opacity:0;
   -webkit-transition:bottom 1s, opacity 200ms;
+  transition:bottom 1s, opacity 200ms;
   font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
 }
 #usage.show {
@@ -140,19 +147,22 @@ padding:10px;
 
 <div class="ta">
 <textarea spellcheck="false" class="textarea"></textarea>
+<textarea id="usage" title="Just 535 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
+&lt;script src="http://iamdanfox.github.io/typetype/typetype.min.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
+
 </div>
 
 <div id="rhs">
 <div id="code">$('textarea').focus()
   .typetype("Sometimes, it's really nice to simulate a human typing...", {
-    ms:1,
     callback: function() {
-        $('body').addClass('reveal')
+      $('body').addClass('reveal')
     }
   }).delay(1500)
   .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
 <span id="secondhalf">  .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
   .typetype("\n\nYou can make it fast... ",{
+    keypress:flashTextarea,
     ms:60,
     e:0
   })
@@ -163,9 +173,6 @@ padding:10px;
   .typetype("\n\n\nTry it out!")</span>
 </div>
 
-<textarea id="usage" title="Just 535 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
-&lt;script src="http://iamdanfox.github.io/typetype/typetype.min.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
-
 </div>
 
 
@@ -174,6 +181,14 @@ padding:10px;
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="typetype.min.js"></script>
 <script type="text/javascript">
+function flashTextarea(){
+  console.log('fl')
+  $('.ta').css({'outline':'1px solid rgba(255,255,0,0.7)'})
+  setTimeout(function(){
+    $('.ta').css({'outline':'1px solid rgba(255,255,0,0)'})
+  },50)
+}
+
 $(function(){
 
   hljs.configure({languages:['js']})
@@ -184,16 +199,17 @@ $(function(){
     this.select()
   })
 
+
   $('.textarea').focus()
     .typetype("Sometimes, it's really nice to simulate a human typing...", {
-      ms:1,
       callback: function() {
-          $('body').addClass('reveal')
+        $('body').addClass('reveal')
       }
     }).delay(1500)
     .typetype("\n\nThat's what this `typetype` jQuery plugin is for.")
     .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
     .typetype("\n\nYou can make it fast... ",{
+      keypress:flashTextarea,
       ms:60,
       e:0
     })
