@@ -59,27 +59,26 @@ jQuery.fn.extend
 
             # omit character, recover after 4 more chars
             if r<0.3 and txt[i-1] isnt txt[i] and i+4<len
-              append txt.slice(i,i+4), -> backsp 4, afterErr
+              return append txt.slice(i,i+4), -> backsp 4, afterErr
 
             # omit character, recover immediately
-            else if r<0.5 and txt[i-1] isnt txt[i] and i<len
-              append txt[i], -> backsp 1, afterErr
+            if r<0.5 and txt[i-1] isnt txt[i] and i<len
+              return append txt[i], -> backsp 1, afterErr
 
             # swap two characters
-            else if r<0.8 and txt[i-1] isnt txt[i] and i<len
-              append txt[i]+txt[i-1], -> backsp 2, afterErr
+            if r<0.8 and txt[i-1] isnt txt[i] and i<len
+              return append txt[i]+txt[i-1], -> backsp 2, afterErr
 
             # hold shift too long
-            else if r<1.0 and i>1 and txt[i-2] is
+            if r<1.0 and i>1 and txt[i-2] is
                 txt[i-2].toUpperCase() and i+4<len
-              append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
+              return append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
                 backsp 5, afterErr
 
             # just insert the correct character!
-            else
-              elem[attr] += txt[i-1]
-              settings.keypress.call elem
-              setTimeout (-> typeTo i+1), interval(i)
+            elem[attr] += txt[i-1]
+            settings.keypress.call elem
+            setTimeout (-> typeTo i+1), interval(i)
           else
             settings.callback.call elem
             jQuery(elem).dequeue()

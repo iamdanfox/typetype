@@ -54,28 +54,30 @@ jQuery.fn.extend({
               });
             }
             if (r < 0.3 && txt[i - 1] !== txt[i] && i + 4 < len) {
-              append(txt.slice(i, i + 4), function() {
+              return append(txt.slice(i, i + 4), function() {
                 return backsp(4, afterErr);
               });
-            } else if (r < 0.5 && txt[i - 1] !== txt[i] && i < len) {
-              append(txt[i], function() {
+            }
+            if (r < 0.5 && txt[i - 1] !== txt[i] && i < len) {
+              return append(txt[i], function() {
                 return backsp(1, afterErr);
               });
-            } else if (r < 0.8 && txt[i - 1] !== txt[i] && i < len) {
-              append(txt[i] + txt[i - 1], function() {
+            }
+            if (r < 0.8 && txt[i - 1] !== txt[i] && i < len) {
+              return append(txt[i] + txt[i - 1], function() {
                 return backsp(2, afterErr);
               });
-            } else if (r < 1.0 && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase() && i + 4 < len) {
-              append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
+            }
+            if (r < 1.0 && i > 1 && txt[i - 2] === txt[i - 2].toUpperCase() && i + 4 < len) {
+              return append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
                 return backsp(5, afterErr);
               });
-            } else {
-              elem[attr] += txt[i - 1];
-              settings.keypress.call(elem);
-              setTimeout((function() {
-                return typeTo(i + 1);
-              }), interval(i));
             }
+            elem[attr] += txt[i - 1];
+            settings.keypress.call(elem);
+            setTimeout((function() {
+              return typeTo(i + 1);
+            }), interval(i));
           } else {
             settings.callback.call(elem);
             jQuery(elem).dequeue();
