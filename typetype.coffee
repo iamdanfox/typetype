@@ -1,11 +1,9 @@
 jQuery.fn.extend
 
   backspace: (num, options) ->
-    settings = jQuery.extend( # TODO try avoiding jQuery.extend, using || instead.
-      keypress: () -> # `this` is bound to elem
-      callback: () -> # `this` is bound to elem
-      ms:100 # typing interval
-    , options)
+    ms = options.ms || 100 # typing interval
+    keypress = options.keypress ||  () -> # `this` is bound to elem
+    callback = options.callback ||  () -> # `this` is bound to elem
 
     return @each ->
       elem = @
@@ -20,24 +18,22 @@ jQuery.fn.extend
         (backsp = (n) ->
           if n # > 0
             elem[attr] = elem[attr].slice 0, -1
-            settings.keypress.call elem
-            setTimeout (-> backsp n-1), Math.random()*settings.ms
+            keypress.call elem
+            setTimeout (-> backsp n-1), Math.random()*ms
           else
-            settings.callback.call elem
+            callback.call elem
             jQuery(elem).dequeue()
           return
         )(num)
 
 
   typetype: (txt, options) ->
-    settings = jQuery.extend(
-      keypress: () -> # `this` is bound to elem
-      callback: () -> # `this` is bound to elem
-      ms:100 # typing interval
-      e:0.04 # error probability
-    , options)
+    ms = options.ms || 100 # typing interval
+    e = options.e || 0.04
+    keypress = options.keypress ||  () -> # `this` is bound to elem
+    callback = options.callback ||  () -> # `this` is bound to elem
 
-    interval = (i) -> Math.random() * settings.ms * (
+    interval = (i) -> Math.random() * ms * (
       if txt[i-1] is txt[i] then 1.6
       else if txt[i-1] is '.' then 12 #
       else if txt[i-1] is '!' then 12
@@ -63,8 +59,8 @@ jQuery.fn.extend
         append = (str, cont) ->
           if str # > 0
             elem[attr] += str[0]
-            settings.keypress.call elem
-            setTimeout (-> append str.slice(1), cont), settings.ms
+            keypress.call elem
+            setTimeout (-> append str.slice(1), cont), ms
           else
             cont()
           return
@@ -72,8 +68,8 @@ jQuery.fn.extend
         backsp = (num, cont) ->
           if num # > 0
             elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
-            settings.keypress.call elem
-            setTimeout (-> backsp num-1, cont), settings.ms
+            keypress.call elem
+            setTimeout (-> backsp num-1, cont), ms
           else
             cont()
           return
@@ -81,7 +77,7 @@ jQuery.fn.extend
         (typeTo = (i) ->
           if i <= (len = txt.length)
             afterErr = -> setTimeout (-> typeTo i), interval(i)
-            r = Math.random() / settings.e
+            r = Math.random() / e
 
             # omit character, recover after 4 more chars
             if r<0.3 and txt[i-1] isnt txt[i] and i+4<len
@@ -107,10 +103,10 @@ jQuery.fn.extend
             # just insert the correct character!
             else
               elem[attr] += txt[i-1]
-              settings.keypress.call elem
+              keypress.call elem
               setTimeout (-> typeTo i+1), interval(i)
           else
-            settings.callback.call elem
+            callback.call elem
             jQuery(elem).dequeue()
           return
         )(1)
