@@ -1,4 +1,34 @@
 jQuery.fn.extend
+
+  backspace: (num, options) ->
+    settings = jQuery.extend( # TODO try avoiding jQuery.extend, using || instead.
+      keypress: () -> # `this` is bound to elem
+      callback: () -> # `this` is bound to elem
+      ms:100 # typing interval
+    , options)
+
+    return @each ->
+      elem = @
+      jQuery(elem).queue ->
+
+        attr = if elem.tagName is 'input'.toUpperCase() or
+            elem.tagName is 'textarea'.toUpperCase()
+          'value'
+        else
+          'innerHTML'
+
+        (backsp = (n) ->
+          if n # > 0
+            elem[attr] = elem[attr].slice 0, -1
+            settings.keypress.call elem
+            setTimeout (-> backsp n-1), Math.random()*settings.ms
+          else
+            settings.callback.call elem
+            jQuery(elem).dequeue()
+          return
+        )(num)
+
+
   typetype: (txt, options) ->
     settings = jQuery.extend(
       keypress: () -> # `this` is bound to elem
