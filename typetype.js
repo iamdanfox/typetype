@@ -3,8 +3,8 @@ jQuery.fn.extend({
   backspace: function(num, options) {
     var settings;
     settings = jQuery.extend({
-      keypress: function() {},
       callback: function() {},
+      keypress: function() {},
       ms: 100
     }, options);
     return this.each(function() {
@@ -31,8 +31,8 @@ jQuery.fn.extend({
   typetype: function(txt, options) {
     var interval, settings;
     settings = jQuery.extend({
-      keypress: function() {},
       callback: function() {},
+      keypress: function() {},
       ms: 100,
       e: 0.04
     }, options);
@@ -68,27 +68,27 @@ jQuery.fn.extend({
           }
         };
         return (typeTo = function(i) {
-          var afterErr, len, r;
-          if (i <= (len = txt.length)) {
+          var afterErr, r;
+          if (i <= txt.length) {
             afterErr = function() {
               return setTimeout((function() {
                 return typeTo(i);
               }), interval(i));
             };
             r = Math.random() / settings.e;
-            if (r < 0.3 && txt[i - 1] !== txt[i] && i + 4 < len) {
+            if (r < 0.3 && txt[i - 1] !== txt[i] && i + 4 < txt.length) {
               append(txt.slice(i, i + 4), function() {
                 return backsp(4, afterErr);
               });
-            } else if (r < 0.7 && i > 1 && /[A-Z]/.test(txt[i - 2] && i + 4 < len)) {
+            } else if (r < 0.7 && i > 1 && /[A-Z]/.test(txt[i - 2] && i + 4 < txt.length)) {
               append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
                 return backsp(5, afterErr);
               });
-            } else if (r < 0.5 && txt[i - 1] !== txt[i] && i < len) {
+            } else if (r < 0.5 && txt[i - 1] !== txt[i] && i < txt.length) {
               append(txt[i], function() {
                 return backsp(1, afterErr);
               });
-            } else if (r < 1.0 && txt[i - 1] !== txt[i] && i < len) {
+            } else if (r < 1.0 && txt[i - 1] !== txt[i] && i < txt.length) {
               append(txt[i] + txt[i - 1], function() {
                 return backsp(2, afterErr);
               });

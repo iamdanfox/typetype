@@ -2,8 +2,8 @@ jQuery.fn.extend
 
   backspace: (num, options) ->
     settings = jQuery.extend( # TODO try avoiding jQuery.extend, using || instead.
-      keypress: () -> # `this` is bound to elem
       callback: () -> # `this` is bound to elem
+      keypress: () -> # `this` is bound to elem
       ms:100 # typing interval
     , options)
 
@@ -31,15 +31,15 @@ jQuery.fn.extend
 
   typetype: (txt, options) ->
     settings = jQuery.extend(
-      keypress: () -> # `this` is bound to elem
       callback: () -> # `this` is bound to elem
+      keypress: () -> # `this` is bound to elem
       ms:100 # typing interval
       e:0.04 # error probability
     , options)
 
     interval = (i) -> Math.random() * settings.ms * (
       if txt[i-1] is txt[i] then 1.6
-      else if txt[i-1] is '.' then 12 #
+      else if txt[i-1] is '.' then 12
       else if txt[i-1] is '!' then 12
       else if txt[i-1] is '?' then 12
       else if txt[i-1] is '\n' then 12
@@ -79,25 +79,25 @@ jQuery.fn.extend
           return
 
         (typeTo = (i) ->
-          if i <= (len = txt.length)
+          if i <= txt.length
             afterErr = -> setTimeout (-> typeTo i), interval(i)
             r = Math.random() / settings.e
 
             # omit character, recover after 4 more chars
-            if r<0.3 and txt[i-1] isnt txt[i] and i+4<len
+            if r<0.3 and txt[i-1] isnt txt[i] and i+4<txt.length
               append txt.slice(i,i+4), -> backsp 4, afterErr
 
             # hold shift too long
-            else if r<0.7 and i>1 and /[A-Z]/.test txt[i-2] and i+4<len
+            else if r<0.7 and i>1 and /[A-Z]/.test txt[i-2] and i+4<txt.length
               append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
                 backsp 5, afterErr
 
             # omit character, recover immediately
-            else if r<0.5 and txt[i-1] isnt txt[i] and i<len
+            else if r<0.5 and txt[i-1] isnt txt[i] and i<txt.length
               append txt[i], -> backsp 1, afterErr
 
             # swap two characters
-            else if r<1.0 and txt[i-1] isnt txt[i] and i<len
+            else if r<1.0 and txt[i-1] isnt txt[i] and i<txt.length
               append txt[i]+txt[i-1], -> backsp 2, afterErr
 
             # forget to press shift
