@@ -1,4 +1,4 @@
-[![Screencast](typetype.gif)][1]
+[![Screencast](screencast.gif)][1]
 
 typetype
 ========
