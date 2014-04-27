@@ -10,12 +10,7 @@ typetype is a jQuery plugin that simulates a human typing.
 Usage
 -----
 
-Include jQuery and [typetype.min.js][2] (just 609 bytes gzipped):
-
-```html
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript"></script>
-<script src="[some-path]/typetype.min.js" type="text/javascript"></script>
-```
+Include jQuery and [typetype.min.js][2] (just 609 bytes gzipped).
 
 You can then append some text to `textarea`s, `input`s or other HTML elements.
 
@@ -45,7 +40,7 @@ $('textarea').typetype(
 ```
 
 `backspace` jQuery plugin
------------------------
+-------------------------
 
 Similarly, you can backspace text from an element in a believable way.
 
@@ -60,5 +55,30 @@ $('textarea').backspace(
 )
 ```
 
+Combined with jQuery animations
+-------------------------------
+
+Both plugins can be chained to make very readable, sequential jQuery:
+
+```javascript
+$('textarea')
+  .typetype('Hello, world!')
+  .delay(1000)
+  .typetype('\n\nGoodbye.')
+  .backspace(25)
+  .fadeOut() // regular jQuery effects queue up nicely
+```
+
+
+Inspired by
+-----------
+
+@dmotz's delightful [TuringType][3].  I was also inspired by Daniel
+LeCheminant's [StackOverflow in 4096 bytes][4].
+
+I challenge anyone to make a smaller gzipped version! (`make gz` was useful)
+
 [1]: http://iamdanfox.github.io/typetype/
 [2]: http://iamdanfox.github.io/typetype/typetype.min.js
+[3]: https://github.com/dmotz/TuringType
+[4]: http://danlec.com/blog/stackoverflow-in-4096-bytes
