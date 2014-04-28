@@ -1,10 +1,10 @@
-all: typetype.js
+all: jquery.typetype.js
 
-typetype.js:
-	coffee -cb typetype.coffee
+jquery.typetype.js:
+	coffee -cb jquery.typetype.coffee
 
-gz: typetype.js
-	uglifyjs typetype.js -cmo typetype.min.js
-	gzip --to-stdout --best --keep -n typetype.min.js > gz
+gz: jquery.typetype.js
+	uglifyjs jquery.typetype.js -cmo jquery.typetype.min.js
+	gzip --to-stdout --best --keep -n jquery.typetype.min.js > gz
 	wc -c gz
 	rm gz

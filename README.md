@@ -10,7 +10,7 @@ typetype is a jQuery plugin that simulates a human typing.
 Usage
 -----
 
-Include jQuery and [typetype.min.js][2] (just 609 bytes gzipped).
+Include jQuery and [jquery.typetype.min.js][2] (just 609 bytes gzipped).
 
 You can then append some text to `textarea`s, `input`s or other HTML elements.
 
@@ -79,6 +79,6 @@ LeCheminant's [StackOverflow in 4096 bytes][4].
 I challenge anyone to make a smaller gzipped version! (`make gz` was useful)
 
 [1]: http://iamdanfox.github.io/typetype/
-[2]: http://iamdanfox.github.io/typetype/typetype.min.js
+[2]: http://iamdanfox.github.io/typetype/jquery.typetype.min.js
 [3]: https://github.com/dmotz/TuringType
 [4]: http://danlec.com/blog/stackoverflow-in-4096-bytes
