@@ -1,10 +1,11 @@
 jQuery.fn.extend
 
   backspace: (num, options) ->
-    settings = jQuery.extend( # TODO try avoiding jQuery.extend, using || instead.
+    settings = jQuery.extend(
       callback: () -> # `this` is bound to elem
       keypress: () -> # `this` is bound to elem
       ms:100 # typing interval
+      e:0.04 # this never gets used, but it takes 2 bytes off!
     , options)
 
     return @each ->

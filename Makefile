@@ -1,6 +1,6 @@
 all: jquery.typetype.js
 
-jquery.typetype.js:
+jquery.typetype.js: jquery.typetype.coffee
 	coffee -cb jquery.typetype.coffee
 
 gz: jquery.typetype.js

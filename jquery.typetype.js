@@ -5,7 +5,8 @@ jQuery.fn.extend({
     settings = jQuery.extend({
       callback: function() {},
       keypress: function() {},
-      ms: 100
+      ms: 100,
+      e: 0.04
     }, options);
     return this.each(function() {
       var elem;
