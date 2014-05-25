@@ -10,7 +10,7 @@ typetype is a jQuery plugin that simulates a human typing.
 Usage
 -----
 
-Include jQuery and [jquery.typetype.min.js][2] (just 607 bytes gzipped).
+Include jQuery and [jquery.typetype.min.js][2] (just 603 bytes gzipped).
 
 You can then append some text to `textarea`s, `input`s or other HTML elements.
 
@@ -28,7 +28,7 @@ $('textarea').typetype(
   'Text to append',
   {
     e: 0.04, // error rate. (use e=0 for perfect typing)
-    ms: 100, // interval between keypresses
+    t: 100, // interval between keypresses
     keypress: function (){
       // called after every keypress (this may be an erroneous keypress!)
     },
@@ -48,7 +48,7 @@ Similarly, you can backspace text from an element in a believable way.
 $('textarea').backspace(
   14, // number of chars to backspace
   {
-    ms: 100, // interval between keypresses
+    t: 100, // interval between keypresses
     keypress: function (){ },
     callback: function (){ }
   }

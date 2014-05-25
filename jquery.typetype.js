@@ -5,7 +5,7 @@ jQuery.fn.extend({
     settings = jQuery.extend({
       callback: function() {},
       keypress: function() {},
-      ms: 100,
+      t: 100,
       e: 0.04
     }, options);
     return this.each(function() {
@@ -20,7 +20,7 @@ jQuery.fn.extend({
             settings.keypress.call(elem);
             setTimeout((function() {
               return backsp(n - 1);
-            }), Math.random() * settings.ms);
+            }), Math.random() * settings.t);
           } else {
             settings.callback.call(elem);
             jQuery(elem).dequeue();
@@ -34,11 +34,11 @@ jQuery.fn.extend({
     settings = jQuery.extend({
       callback: function() {},
       keypress: function() {},
-      ms: 100,
+      t: 100,
       e: 0.04
     }, options);
     interval = function(i) {
-      return Math.random() * settings.ms * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
+      return Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
     };
     return this.each(function() {
       var elem;
@@ -52,7 +52,7 @@ jQuery.fn.extend({
             settings.keypress.call(elem);
             setTimeout((function() {
               return append(str.slice(1), cont);
-            }), settings.ms);
+            }), settings.t);
           } else {
             cont();
           }
@@ -63,7 +63,7 @@ jQuery.fn.extend({
             settings.keypress.call(elem);
             setTimeout((function() {
               return backsp(num - 1, cont);
-            }), settings.ms);
+            }), settings.t);
           } else {
             cont();
           }

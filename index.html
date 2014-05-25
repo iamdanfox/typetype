@@ -147,7 +147,7 @@ padding:10px;
 
 <div class="ta">
 <textarea spellcheck="false" class="textarea"></textarea>
-<textarea id="usage" title="Just 607 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
+<textarea id="usage" title="Just 603 bytes gzipped!" readonly spellcheck='off' wrap='off'>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js" type="text/javascript">&lt;/script&gt;
 &lt;script src="http://iamdanfox.github.io/typetype/jquery.typetype.min.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
 
 </div>
@@ -163,11 +163,11 @@ padding:10px;
 <span id="secondhalf">  .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
   .typetype("\n\nYou can make it fast... ",{
     keypress:flashTextarea,
-    ms:60,
+    t:60,
     e:0
   })
   .typetype("or slow and error-prone.", {
-    ms:200,
+    t:200,
     e:0.2, // the default error rate is 0.04
   })
   .backspace(48)
@@ -211,11 +211,11 @@ $(function(){
     .fadeTo(400,0.3).delay(1000).queue(function(){$('#secondhalf').fadeIn(1000);$('textarea').dequeue()}).delay(4000).fadeTo(400,1.0).delay(1000)
     .typetype("\n\nYou can make it fast... ",{
       keypress:flashTextarea,
-      ms:60,
+      t:60,
       e:0
     })
     .typetype("or slow and error-prone.", {
-      ms:200,
+      t:200,
       e:0.2, // the default error rate is 0.04
       callback: function(){
         $("#usage").addClass('show')

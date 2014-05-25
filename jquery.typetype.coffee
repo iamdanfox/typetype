@@ -4,7 +4,7 @@ jQuery.fn.extend
     settings = jQuery.extend(
       callback: () -> # `this` is bound to elem
       keypress: () -> # `this` is bound to elem
-      ms:100 # typing interval
+      t:100 # typing interval
       e:0.04 # this never gets used, but it takes 2 bytes off!
     , options)
 
@@ -22,7 +22,7 @@ jQuery.fn.extend
           if n # > 0
             elem[attr] = elem[attr].slice 0, -1
             settings.keypress.call elem
-            setTimeout (-> backsp n-1), Math.random()*settings.ms
+            setTimeout (-> backsp n-1), Math.random()*settings.t
           else
             settings.callback.call elem
             jQuery(elem).dequeue()
@@ -34,11 +34,11 @@ jQuery.fn.extend
     settings = jQuery.extend(
       callback: () -> # `this` is bound to elem
       keypress: () -> # `this` is bound to elem
-      ms:100 # typing interval
+      t:100 # typing interval
       e:0.04 # error probability
     , options)
 
-    interval = (i) -> Math.random() * settings.ms * (
+    interval = (i) -> Math.random() * settings.t * (
       if txt[i-1] is txt[i] then 1.6
       else if txt[i-1] is '.' then 12
       else if txt[i-1] is '!' then 12
@@ -65,7 +65,7 @@ jQuery.fn.extend
           if str # > 0
             elem[attr] += str[0]
             settings.keypress.call elem
-            setTimeout (-> append str.slice(1), cont), settings.ms
+            setTimeout (-> append str.slice(1), cont), settings.t
           else
             cont()
           return
@@ -74,7 +74,7 @@ jQuery.fn.extend
           if num # > 0
             elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
             settings.keypress.call elem
-            setTimeout (-> backsp num-1, cont), settings.ms
+            setTimeout (-> backsp num-1, cont), settings.t
           else
             cont()
           return
