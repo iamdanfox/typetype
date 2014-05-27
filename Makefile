@@ -10,4 +10,4 @@ gz: jquery.typetype.min.js
 	gzip --to-stdout --best --keep -n jquery.typetype.min.js | wc -c
 
 zop: jquery.typetype.min.js # zopfli is Google's zlib compression algorithm: `brew install zopfli` to try it.
-	zopfli -c --i50 --gzip jquery.typetype.min.js | wc -c
+	zopfli -c --i50 --deflate jquery.typetype.min.js | wc -c
