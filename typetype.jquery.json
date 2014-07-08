@@ -4,7 +4,7 @@
   "title": "TypeType - human typing with jQuery",
   "author": {
     "name":"iamdanfox",
-    "url": "http://github.com/iamdanfox",
+    "url": "http://github.com/iamdanfox"
   },
   "homepage": "https://github.com/iamdanfox/typetype",
   "demo": "http://iamdanfox.github.io/typetype/",
@@ -16,5 +16,5 @@
   ],
   "dependencies": {
     "jquery": "*"
-  },
+  }
 }
