@@ -1,0 +1,20 @@
+{
+  "name": "typetype",
+  "version": "0.1.0",
+  "title": "TypeType - human typing with jQuery",
+  "author": {
+    "name":"iamdanfox",
+    "url": "http://github.com/iamdanfox",
+  },
+  "homepage": "https://github.com/iamdanfox/typetype",
+  "demo": "http://iamdanfox.github.io/typetype/",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://choosealicense.com/licenses/mit/"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+}
