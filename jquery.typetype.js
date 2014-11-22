@@ -13,13 +13,13 @@ jQuery.fn.extend({
       elem = this;
       return jQuery(elem).queue(function() {
         var backsp;
-        return (backsp = function(n) {
+        return (backsp = function(n, fakeparam) {
           if (n) {
-            elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'] = elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'].slice(0, -1);
+            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
-              return backsp(n - 1);
-            }), Math.random() * settings.t);
+              return backsp(n - 1, fakeparam);
+            }), settings.t);
           } else {
             settings.callback.call(elem);
             jQuery(elem).dequeue();
@@ -43,7 +43,7 @@ jQuery.fn.extend({
         var append, backsp, typeTo;
         append = function(str, cont) {
           if (str) {
-            elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'] += str[0];
+            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += str[0];
             settings.keypress.call(elem);
             setTimeout((function() {
               return append(str.slice(1), cont);
@@ -54,7 +54,7 @@ jQuery.fn.extend({
         };
         backsp = function(num, cont) {
           if (num) {
-            elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'] = elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'].slice(0, -1);
+            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
               return backsp(num - 1, cont);
@@ -93,7 +93,7 @@ jQuery.fn.extend({
                 return backsp(1, afterErr);
               });
             } else {
-              elem[elem.tagName === 'input'.toUpperCase() || elem.tagName === 'textarea'.toUpperCase() ? 'value' : 'innerHTML'] += txt[i - 1];
+              elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += txt[i - 1];
               settings.keypress.call(elem);
               setTimeout((function() {
                 return typeTo(i + 1);

@@ -11,11 +11,11 @@ jQuery.fn.extend
     return @each ->
       elem = @
       jQuery(elem).queue ->
-        (backsp = (n) ->
+        (backsp = (n, fakeparam) ->
           if n # > 0
-            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] = elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'].slice 0, -1
+            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1
             settings.keypress.call elem
-            setTimeout (-> backsp n-1), Math.random()*settings.t
+            setTimeout (-> backsp n-1, fakeparam), settings.t
           else
             settings.callback.call elem
             jQuery(elem).dequeue()
@@ -37,7 +37,7 @@ jQuery.fn.extend
 
         append = (str, cont) ->
           if str # > 0
-            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] += str[0]
+            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] += str[0]
             settings.keypress.call elem
             setTimeout (-> append str.slice(1), cont), settings.t
           else
@@ -46,7 +46,7 @@ jQuery.fn.extend
 
         backsp = (num, cont) ->
           if num # > 0
-            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] = elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
+            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
             settings.keypress.call elem
             setTimeout (-> backsp num-1, cont), settings.t
           else
@@ -91,7 +91,7 @@ jQuery.fn.extend
 
             # just insert the correct character!
             else
-              elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] += txt[i-1]
+              elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] += txt[i-1]
               settings.keypress.call elem
               setTimeout (-> typeTo i+1), (Math.random() * settings.t * (
                 if txt[i-1] is txt[i] then 1.6
