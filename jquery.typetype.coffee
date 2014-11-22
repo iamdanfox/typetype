@@ -20,6 +20,16 @@ $.fn.extend
             settings.callback.call elem
             $(elem).dequeue()
           return
+
+        append = (fake, fakeyness) ->
+          if fake # > 0
+            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] += fake[0]
+            settings.keypress.call elem
+            setTimeout (-> append fake.slice(1), fakeyness; return), settings.t
+          else
+            fakeyness()
+          return
+
         backsp num
         return
       return
@@ -37,15 +47,6 @@ $.fn.extend
       elem = @
       $(elem).queue -> # this function goes into the 'fx' queue.
 
-        append = (str, cont) ->
-          if str # > 0
-            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] += str[0]
-            settings.keypress.call elem
-            setTimeout (-> append str.slice(1), cont; return), settings.t
-          else
-            cont()
-          return
-
         backsp = (num, cont) ->
           if num # > 0
             elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
@@ -55,22 +56,31 @@ $.fn.extend
             cont()
           return
 
-        typeTo = (i) ->
-          if txt.length >= i
-            afterErr = -> setTimeout (-> typeTo i; return), (Math.random() * settings.t * (
-              if txt[i-1] is txt[i] then 1.6
-              else if txt[i-1] is '.' then 12
-              else if txt[i-1] is '!' then 12
-              else if txt[i-1] is '?' then 12
-              else if txt[i-1] is '\n' then 12
-              else if txt[i-1] is ',' then 8
-              else if txt[i-1] is ';' then 8
-              else if txt[i-1] is ':' then 8
-              else if txt[i-1] is ' ' then 3
-              else 2
-            ))
-            r = Math.random() / settings.e
+        append = (str, cont) ->
+          if str # > 0
+            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] += str[0]
+            settings.keypress.call elem
+            setTimeout (-> append str.slice(1), cont; return), settings.t
+          else
+            cont()
+          return
 
+        typeTo = (i) ->
+          afterErr = -> setTimeout (-> typeTo i; return), (Math.random() * settings.t * (
+            if txt[i-1] is txt[i] then 1.6
+            else if txt[i-1] is '.' then 12
+            else if txt[i-1] is '!' then 12
+            else if txt[i-1] is '?' then 12
+            else if txt[i-1] is '\n' then 12
+            else if txt[i-1] is ',' then 8
+            else if txt[i-1] is ';' then 8
+            else if txt[i-1] is ':' then 8
+            else if txt[i-1] is ' ' then 3
+            else 2
+          ))
+          r = Math.random() / settings.e
+
+          if txt.length >= i
             # omit character, recover after 4 more chars
             if 0.3 > r and txt[i-1] isnt txt[i] and txt.length > i+4
               append txt.slice(i,i+4), (-> backsp 4, afterErr; return)
