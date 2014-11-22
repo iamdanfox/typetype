@@ -11,20 +11,21 @@ jQuery.fn.extend({
     return this.each(function() {
       var elem;
       elem = this;
-      return jQuery(elem).queue(function() {
+      jQuery(elem).queue(function() {
         var backsp;
-        return (backsp = function(n, fakeparam) {
+        backsp = function(n, fakeparam) {
           if (n) {
             elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
-              return backsp(n - 1, fakeparam);
+              backsp(n - 1, fakeparam);
             }), settings.t);
           } else {
             settings.callback.call(elem);
             jQuery(elem).dequeue();
           }
-        })(num);
+        };
+        backsp(num);
       });
     });
   },
@@ -39,14 +40,14 @@ jQuery.fn.extend({
     return this.each(function() {
       var elem;
       elem = this;
-      return jQuery(elem).queue(function() {
+      jQuery(elem).queue(function() {
         var append, backsp, typeTo;
         append = function(str, cont) {
           if (str) {
             elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += str[0];
             settings.keypress.call(elem);
             setTimeout((function() {
-              return append(str.slice(1), cont);
+              append(str.slice(1), cont);
             }), settings.t);
           } else {
             cont();
@@ -57,53 +58,54 @@ jQuery.fn.extend({
             elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
-              return backsp(num - 1, cont);
+              backsp(num - 1, cont);
             }), settings.t);
           } else {
             cont();
           }
         };
-        return (typeTo = function(i) {
+        typeTo = function(i) {
           var afterErr, r;
           if (txt.length >= i) {
             afterErr = function() {
               return setTimeout((function() {
-                return typeTo(i);
+                typeTo(i);
               }), Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
             };
             r = Math.random() / settings.e;
             if (0.3 > r && txt[i - 1] !== txt[i] && txt.length > i + 4) {
-              append(txt.slice(i, i + 4), function() {
-                return backsp(4, afterErr);
-              });
+              append(txt.slice(i, i + 4), (function() {
+                backsp(4, afterErr);
+              }));
             } else if (0.7 > r && i > 1 && /[A-Z]/.test(txt[i - 2] && txt.length > i + 4)) {
-              append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
-                return backsp(5, afterErr);
-              });
+              append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), (function() {
+                backsp(5, afterErr);
+              }));
             } else if (0.5 > r && txt[i - 1] !== txt[i] && txt.length > i) {
-              append(txt[i], function() {
-                return backsp(1, afterErr);
-              });
+              append(txt[i], (function() {
+                backsp(1, afterErr);
+              }));
             } else if (1.0 > r && txt[i - 1] !== txt[i] && txt.length > i) {
-              append(txt[i] + txt[i - 1], function() {
-                return backsp(2, afterErr);
-              });
+              append(txt[i] + txt[i - 1], (function() {
+                backsp(2, afterErr);
+              }));
             } else if (0.5 > r && /[A-Z]/.test(txt[i])) {
-              append(txt[i].toLowerCase(), function() {
-                return backsp(1, afterErr);
-              });
+              append(txt[i].toLowerCase(), (function() {
+                backsp(1, afterErr);
+              }));
             } else {
               elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += txt[i - 1];
               settings.keypress.call(elem);
               setTimeout((function() {
-                return typeTo(i + 1);
+                typeTo(i + 1);
               }), Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
             }
           } else {
             settings.callback.call(elem);
             jQuery(elem).dequeue();
           }
-        })(1);
+        };
+        typeTo(1);
       });
     });
   }
