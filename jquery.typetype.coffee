@@ -38,19 +38,6 @@ jQuery.fn.extend
       e:0.04 # error probability
     , options)
 
-    interval = (i) -> Math.random() * settings.t * (
-      if txt[i-1] is txt[i] then 1.6
-      else if txt[i-1] is '.' then 12
-      else if txt[i-1] is '!' then 12
-      else if txt[i-1] is '?' then 12
-      else if txt[i-1] is '\n' then 12
-      else if txt[i-1] is ',' then 8
-      else if txt[i-1] is ';' then 8
-      else if txt[i-1] is ':' then 8
-      else if txt[i-1] is ' ' then 3
-      else 2
-    )
-
     return @each ->
       elem = @
       jQuery(elem).queue -> # this function goes into the 'fx' queue.
@@ -80,36 +67,58 @@ jQuery.fn.extend
           return
 
         (typeTo = (i) ->
-          if i <= txt.length
-            afterErr = -> setTimeout (-> typeTo i), interval(i)
+          if txt.length >= i
+            afterErr = -> setTimeout (-> typeTo i), (Math.random() * settings.t * (
+              if txt[i-1] is txt[i] then 1.6
+              else if txt[i-1] is '.' then 12
+              else if txt[i-1] is '!' then 12
+              else if txt[i-1] is '?' then 12
+              else if txt[i-1] is '\n' then 12
+              else if txt[i-1] is ',' then 8
+              else if txt[i-1] is ';' then 8
+              else if txt[i-1] is ':' then 8
+              else if txt[i-1] is ' ' then 3
+              else 2
+            ))
             r = Math.random() / settings.e
 
             # omit character, recover after 4 more chars
-            if r<0.3 and txt[i-1] isnt txt[i] and i+4<txt.length
+            if 0.3 > r and txt[i-1] isnt txt[i] and txt.length > i+4
               append txt.slice(i,i+4), -> backsp 4, afterErr
 
             # hold shift too long
-            else if r<0.7 and i>1 and /[A-Z]/.test txt[i-2] and i+4<txt.length
+            else if 0.7 > r and i > 1 and /[A-Z]/.test txt[i-2] and txt.length > i+4
               append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
                 backsp 5, afterErr
 
             # omit character, recover immediately
-            else if r<0.5 and txt[i-1] isnt txt[i] and i<txt.length
+            else if 0.5 > r and txt[i-1] isnt txt[i] and txt.length > i
               append txt[i], -> backsp 1, afterErr
 
             # swap two characters
-            else if r<1.0 and txt[i-1] isnt txt[i] and i<txt.length
+            else if 1.0 > r and txt[i-1] isnt txt[i] and txt.length > i
               append txt[i]+txt[i-1], -> backsp 2, afterErr
 
             # forget to press shift
-            else if r<0.5 and /[A-Z]/.test txt[i]  #uppercase letter coming up
+            else if 0.5 > r and /[A-Z]/.test txt[i]  #uppercase letter coming up
               append txt[i].toLowerCase(), -> backsp 1, afterErr
 
             # just insert the correct character!
             else
               elem[attr] += txt[i-1]
               settings.keypress.call elem
-              setTimeout (-> typeTo i+1), interval(i)
+              setTimeout (-> typeTo i+1), (Math.random() * settings.t * (
+                if txt[i-1] is txt[i] then 1.6
+                else if txt[i-1] is '.' then 12
+                else if txt[i-1] is '!' then 12
+                else if txt[i-1] is '?' then 12
+                else if txt[i-1] is '\n' then 12
+                else if txt[i-1] is ',' then 8
+                else if txt[i-1] is ';' then 8
+                else if txt[i-1] is ':' then 8
+                else if txt[i-1] is ' ' then 3
+                else 2
+              ))
           else
             settings.callback.call elem
             jQuery(elem).dequeue()

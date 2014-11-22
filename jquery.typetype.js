@@ -30,16 +30,13 @@ jQuery.fn.extend({
     });
   },
   typetype: function(txt, options) {
-    var interval, settings;
+    var settings;
     settings = jQuery.extend({
       callback: function() {},
       keypress: function() {},
       t: 100,
       e: 0.04
     }, options);
-    interval = function(i) {
-      return Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2);
-    };
     return this.each(function() {
       var elem;
       elem = this;
@@ -70,30 +67,30 @@ jQuery.fn.extend({
         };
         return (typeTo = function(i) {
           var afterErr, r;
-          if (i <= txt.length) {
+          if (txt.length >= i) {
             afterErr = function() {
               return setTimeout((function() {
                 return typeTo(i);
-              }), interval(i));
+              }), Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
             };
             r = Math.random() / settings.e;
-            if (r < 0.3 && txt[i - 1] !== txt[i] && i + 4 < txt.length) {
+            if (0.3 > r && txt[i - 1] !== txt[i] && txt.length > i + 4) {
               append(txt.slice(i, i + 4), function() {
                 return backsp(4, afterErr);
               });
-            } else if (r < 0.7 && i > 1 && /[A-Z]/.test(txt[i - 2] && i + 4 < txt.length)) {
+            } else if (0.7 > r && i > 1 && /[A-Z]/.test(txt[i - 2] && txt.length > i + 4)) {
               append(txt[i - 1].toUpperCase() + txt.slice(i, i + 4), function() {
                 return backsp(5, afterErr);
               });
-            } else if (r < 0.5 && txt[i - 1] !== txt[i] && i < txt.length) {
+            } else if (0.5 > r && txt[i - 1] !== txt[i] && txt.length > i) {
               append(txt[i], function() {
                 return backsp(1, afterErr);
               });
-            } else if (r < 1.0 && txt[i - 1] !== txt[i] && i < txt.length) {
+            } else if (1.0 > r && txt[i - 1] !== txt[i] && txt.length > i) {
               append(txt[i] + txt[i - 1], function() {
                 return backsp(2, afterErr);
               });
-            } else if (r < 0.5 && /[A-Z]/.test(txt[i])) {
+            } else if (0.5 > r && /[A-Z]/.test(txt[i])) {
               append(txt[i].toLowerCase(), function() {
                 return backsp(1, afterErr);
               });
@@ -102,7 +99,7 @@ jQuery.fn.extend({
               settings.keypress.call(elem);
               setTimeout((function() {
                 return typeTo(i + 1);
-              }), interval(i));
+              }), Math.random() * settings.t * (txt[i - 1] === txt[i] ? 1.6 : txt[i - 1] === '.' ? 12 : txt[i - 1] === '!' ? 12 : txt[i - 1] === '?' ? 12 : txt[i - 1] === '\n' ? 12 : txt[i - 1] === ',' ? 8 : txt[i - 1] === ';' ? 8 : txt[i - 1] === ':' ? 8 : txt[i - 1] === ' ' ? 3 : 2));
             }
           } else {
             settings.callback.call(elem);
