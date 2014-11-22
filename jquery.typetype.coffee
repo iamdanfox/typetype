@@ -11,16 +11,9 @@ jQuery.fn.extend
     return @each ->
       elem = @
       jQuery(elem).queue ->
-
-        attr = if elem.tagName is 'input'.toUpperCase() or
-            elem.tagName is 'textarea'.toUpperCase()
-          'value'
-        else
-          'innerHTML'
-
         (backsp = (n) ->
           if n # > 0
-            elem[attr] = elem[attr].slice 0, -1
+            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] = elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'].slice 0, -1
             settings.keypress.call elem
             setTimeout (-> backsp n-1), Math.random()*settings.t
           else
@@ -42,15 +35,9 @@ jQuery.fn.extend
       elem = @
       jQuery(elem).queue -> # this function goes into the 'fx' queue.
 
-        attr = if elem.tagName is 'input'.toUpperCase() or
-            elem.tagName is 'textarea'.toUpperCase()
-          'value'
-        else
-          'innerHTML'
-
         append = (str, cont) ->
           if str # > 0
-            elem[attr] += str[0]
+            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] += str[0]
             settings.keypress.call elem
             setTimeout (-> append str.slice(1), cont), settings.t
           else
@@ -59,7 +46,7 @@ jQuery.fn.extend
 
         backsp = (num, cont) ->
           if num # > 0
-            elem[attr] = elem[attr].slice 0, -1 # inlined delchar function
+            elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] = elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
             settings.keypress.call elem
             setTimeout (-> backsp num-1, cont), settings.t
           else
@@ -88,8 +75,7 @@ jQuery.fn.extend
 
             # hold shift too long
             else if 0.7 > r and i > 1 and /[A-Z]/.test txt[i-2] and txt.length > i+4
-              append txt[i-1].toUpperCase()+txt.slice(i,i+4), ->
-                backsp 5, afterErr
+              append txt[i-1].toUpperCase()+txt.slice(i,i+4), -> backsp 5, afterErr
 
             # omit character, recover immediately
             else if 0.5 > r and txt[i-1] isnt txt[i] and txt.length > i
@@ -105,7 +91,7 @@ jQuery.fn.extend
 
             # just insert the correct character!
             else
-              elem[attr] += txt[i-1]
+              elem[if elem.tagName is 'input'.toUpperCase() or elem.tagName is 'textarea'.toUpperCase() then 'value' else 'innerHTML'] += txt[i-1]
               settings.keypress.call elem
               setTimeout (-> typeTo i+1), (Math.random() * settings.t * (
                 if txt[i-1] is txt[i] then 1.6
