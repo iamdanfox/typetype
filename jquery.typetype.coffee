@@ -1,7 +1,7 @@
-jQuery.fn.extend
+$.fn.extend
 
   backspace: (num, options) ->
-    settings = jQuery.extend(
+    settings = $.extend(
       callback: () -> # `this` is bound to elem
       keypress: () -> # `this` is bound to elem
       t:100 # typing interval
@@ -10,7 +10,7 @@ jQuery.fn.extend
 
     @each ->
       elem = @
-      jQuery(elem).queue ->
+      $(elem).queue ->
         backsp = (n, fakeparam) ->
           if n # > 0
             elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1
@@ -18,7 +18,7 @@ jQuery.fn.extend
             setTimeout (-> backsp n-1, fakeparam; return), settings.t
           else
             settings.callback.call elem
-            jQuery(elem).dequeue()
+            $(elem).dequeue()
           return
         backsp num
         return
@@ -26,7 +26,7 @@ jQuery.fn.extend
 
 
   typetype: (txt, options) ->
-    settings = jQuery.extend(
+    settings = $.extend(
       callback: () -> # `this` is bound to elem
       keypress: () -> # `this` is bound to elem
       t:100 # typing interval
@@ -35,7 +35,7 @@ jQuery.fn.extend
 
     @each ->
       elem = @
-      jQuery(elem).queue -> # this function goes into the 'fx' queue.
+      $(elem).queue -> # this function goes into the 'fx' queue.
 
         append = (str, cont) ->
           if str # > 0
@@ -109,7 +109,7 @@ jQuery.fn.extend
               ))
           else
             settings.callback.call elem
-            jQuery(elem).dequeue()
+            $(elem).dequeue()
           return
         typeTo 1
         return
