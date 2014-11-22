@@ -15,7 +15,7 @@ jQuery.fn.extend({
         var backsp;
         backsp = function(n, fakeparam) {
           if (n) {
-            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
+            elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
               backsp(n - 1, fakeparam);
@@ -44,7 +44,7 @@ jQuery.fn.extend({
         var append, backsp, typeTo;
         append = function(str, cont) {
           if (str) {
-            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += str[0];
+            elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += str[0];
             settings.keypress.call(elem);
             setTimeout((function() {
               append(str.slice(1), cont);
@@ -55,7 +55,7 @@ jQuery.fn.extend({
         };
         backsp = function(num, cont) {
           if (num) {
-            elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
+            elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'] = elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'].slice(0, -1);
             settings.keypress.call(elem);
             setTimeout((function() {
               backsp(num - 1, cont);
@@ -94,7 +94,7 @@ jQuery.fn.extend({
                 backsp(1, afterErr);
               }));
             } else {
-              elem[/(input|textarea)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += txt[i - 1];
+              elem[/(np|x)/i.test(elem.tagName) ? 'value' : 'innerHTML'] += txt[i - 1];
               settings.keypress.call(elem);
               setTimeout((function() {
                 typeTo(i + 1);

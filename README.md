@@ -10,7 +10,7 @@ typetype is a jQuery plugin that simulates a human typing.
 Usage
 -----
 
-Include jQuery and [jquery.typetype.min.js][2] (just 534 bytes gzipped).
+Include jQuery and [jquery.typetype.min.js][2] (just 528 bytes gzipped).
 
 You can then append some text to `textarea`s, `input`s or other HTML elements.
 

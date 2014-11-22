@@ -13,7 +13,7 @@ jQuery.fn.extend
       jQuery(elem).queue ->
         backsp = (n, fakeparam) ->
           if n # > 0
-            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1
+            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1
             settings.keypress.call elem
             setTimeout (-> backsp n-1, fakeparam; return), settings.t
           else
@@ -39,7 +39,7 @@ jQuery.fn.extend
 
         append = (str, cont) ->
           if str # > 0
-            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] += str[0]
+            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] += str[0]
             settings.keypress.call elem
             setTimeout (-> append str.slice(1), cont; return), settings.t
           else
@@ -48,7 +48,7 @@ jQuery.fn.extend
 
         backsp = (num, cont) ->
           if num # > 0
-            elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
+            elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] = elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'].slice 0, -1 # inlined delchar function
             settings.keypress.call elem
             setTimeout (-> backsp num-1, cont; return), settings.t
           else
@@ -93,7 +93,7 @@ jQuery.fn.extend
 
             # just insert the correct character!
             else
-              elem[if /(input|textarea)/i.test elem.tagName then 'value' else 'innerHTML'] += txt[i-1]
+              elem[if /(np|x)/i.test elem.tagName then 'value' else 'innerHTML'] += txt[i-1]
               settings.keypress.call elem
               setTimeout (-> typeTo i+1; return), (Math.random() * settings.t * (
                 if txt[i-1] is txt[i] then 1.6
