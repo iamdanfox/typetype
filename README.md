@@ -78,6 +78,12 @@ LeCheminant's [StackOverflow in 4096 bytes][4].
 
 I challenge anyone to make a smaller gzipped version! (`make gz` was useful)
 
+
+License
+-------
+
+This project is licensed under the MIT license.
+
 [1]: http://iamdanfox.github.io/typetype/
 [2]: http://iamdanfox.github.io/typetype/jquery.typetype.min.js
 [3]: https://github.com/dmotz/TuringType
